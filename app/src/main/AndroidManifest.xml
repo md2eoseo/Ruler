@@ -26,7 +26,6 @@
         <activity android:name=".LocateActivity"
             android:label="@string/activity_locate_label">
         </activity>
-
         <meta-data android:name="com.google.ar.core" android:value="required"/>
     </application>
 

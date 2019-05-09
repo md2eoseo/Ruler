@@ -10,8 +10,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Config;
@@ -21,6 +23,7 @@ import com.google.ar.core.Session;
 public class MeasureActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private TextView mTextView;
     private GLSurfaceView mSurfaceView;
     private MainRenderer mRenderer;
 
@@ -35,12 +38,13 @@ public class MeasureActivity extends Activity {
         hideStatusBarAndTitleBar();
         setContentView(R.layout.activity_measure);
 
+        mTextView = (TextView) findViewById(R.id.txt_dist);
         mSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
 
         DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
         if (displayManager != null) {
             displayManager.registerDisplayListener(new DisplayManager.DisplayListener() {
-                @Override
+                    @Override
                 public void onDisplayAdded(int displayId) {
                 }
 
@@ -85,7 +89,7 @@ public class MeasureActivity extends Activity {
         super.onPause();
 
         mSurfaceView.onPause();
-        mSession.pause();
+//        mSession.pause();
     }
 
     @Override
@@ -117,12 +121,14 @@ public class MeasureActivity extends Activity {
             Log.d(TAG, "This device is not support ARCore.");
         }
         mSession.configure(mConfig);
-        mSession.resume();
+//        mSession.resume();
 
         mSurfaceView.onResume();
     }
 
+    public void onRemoveButtonClick(View view){
 
+    }
 
     private void requestCameraPermission(){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
