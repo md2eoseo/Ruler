@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    Button btn_measure;
+    Button btn_measure; //ㅁㄴㅇㄻㄴㅇㄹ
     Button btn_locate;
     Button btn_exit;
 
