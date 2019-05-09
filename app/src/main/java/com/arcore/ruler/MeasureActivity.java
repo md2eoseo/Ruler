@@ -16,9 +16,14 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.ar.core.ArCoreApk;
+import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
+import com.google.ar.core.PointCloud;
 import com.google.ar.core.Session;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MeasureActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -31,6 +36,12 @@ public class MeasureActivity extends Activity {
 
     private Session mSession;
     private Config mConfig;
+
+    private List<float[]> mPoints = new ArrayList<float[]>();
+
+    private float mLastX;
+    private float mLastY;
+    private boolean mPointAdded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +87,19 @@ public class MeasureActivity extends Activity {
                 if (frame.hasDisplayGeometryChanged()) {
                     mRenderer.transformDisplayGeometry(frame);
                 }
+
+                PointCloud pointCloud = frame.acquirePointCloud();
+                mRenderer.updatePointCloud(pointCloud);
+                pointCloud.release();
+
+                Camera camera = frame.getCamera();
+                float[] projMatrix = new float[16];
+                camera.getProjectionMatrix(projMatrix, 0, 0.1f, 100.0f);
+                float[] viewMatrix = new float[16];
+                camera.getViewMatrix(viewMatrix, 0);
+
+                mRenderer.setProjectionMatrix(projMatrix);
+                mRenderer.updateViewMatrix(viewMatrix);
             }
         });
         mSurfaceView.setPreserveEGLContextOnPause(true);
