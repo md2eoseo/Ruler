@@ -11,21 +11,23 @@
         android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
         app:srcCompat="@drawable/ruler" />
 
     <Button
         android:id="@+id/btn_measure"
+        android:text="거리 측정"
         android:layout_width="match_parent"
         android:layout_height="100dp" />
 
     <Button
         android:id="@+id/btn_locate"
+        android:text="모델 배치"
         android:layout_width="match_parent"
         android:layout_height="100dp" />
 
     <Button
         android:id="@+id/btn_exit"
+        android:text="나가기"
         android:layout_width="match_parent"
         android:layout_height="100dp" />
 </LinearLayout>
