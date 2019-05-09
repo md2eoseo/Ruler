@@ -23,6 +23,7 @@
             android:label="@string/activity_measure_label">
         </activity>
 
+        <meta-data android:name="com.google.ar.core" android:value="required"/>
     </application>
 
 </manifest>
