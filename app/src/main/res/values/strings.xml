@@ -3,4 +3,5 @@
     <string name="btn_measure">거리 측정</string>
     <string name="btn_locate">모델 배치</string>
     <string name="exit">나가기</string>
+    <string name="activity_mesure_label"> 거리측정 </string>
 </resources>
