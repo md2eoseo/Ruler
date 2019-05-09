@@ -89,7 +89,7 @@ public class MeasureActivity extends Activity {
         super.onPause();
 
         mSurfaceView.onPause();
-//        mSession.pause();
+        mSession.pause();
     }
 
     @Override
@@ -121,7 +121,7 @@ public class MeasureActivity extends Activity {
             Log.d(TAG, "This device is not support ARCore.");
         }
         mSession.configure(mConfig);
-//        mSession.resume();
+        mSession.resume();
 
         mSurfaceView.onResume();
     }

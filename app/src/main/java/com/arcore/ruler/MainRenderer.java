@@ -32,29 +32,29 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-//        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-//        GLES20.glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
-//
-//        mCamera.init();
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        GLES20.glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+
+        mCamera.init();
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl10, int width, int height) {
-//        GLES20.glViewport(0, 0, width, height);
+        GLES20.glViewport(0, 0, width, height);
         mViewportChanged = true;
-//        mViewportWidth = width;
-//        mViewportHeight = height;
+        mViewportWidth = width;
+        mViewportHeight = height;
     }
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-//        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-//
-//        mRenderCallback.preRender();
-//
-//        GLES20.glDepthMask(false);
-//        mCamera.draw();
-//        GLES20.glDepthMask(true);
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+        mRenderCallback.preRender();
+
+        GLES20.glDepthMask(false);
+        mCamera.draw();
+        GLES20.glDepthMask(true);
     }
 
     public int getTextureId() {
