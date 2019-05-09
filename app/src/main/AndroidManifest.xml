@@ -18,7 +18,11 @@
         </activity>
 
         <activity android:name=".MeasureActivity"
-            android:label="@string/activity_mesure_label">
+            android:label="@string/activity_measure_label">
+        </activity>
+
+        <activity android:name=".LocateActivity"
+            android:label="@string/activity_locate_label">
         </activity>
 
     </application>
