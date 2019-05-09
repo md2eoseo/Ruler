@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,11 +20,14 @@ import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
+import com.google.ar.core.HitResult;
 import com.google.ar.core.PointCloud;
+import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MeasureActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -92,6 +96,18 @@ public class MeasureActivity extends Activity {
                 mRenderer.updatePointCloud(pointCloud);
                 pointCloud.release();
 
+                if (mPointAdded) {
+                    List<HitResult> results = frame.hitTest(mLastX, mLastY);
+                    for (HitResult result : results) {
+                        Pose pose = result.getHitPose();
+                        float[] points = new float[]{ pose.tx(), pose.ty(), pose.tz() };
+                        mPoints.add(points);
+                        mRenderer.addPoint(points);
+                        updateDistance();
+                    }
+                    mPointAdded = false;
+                }
+
                 Camera camera = frame.getCamera();
                 float[] projMatrix = new float[16];
                 camera.getProjectionMatrix(projMatrix, 0, 0.1f, 100.0f);
@@ -150,8 +166,49 @@ public class MeasureActivity extends Activity {
         mSurfaceView.onResume();
     }
 
-    public void onRemoveButtonClick(View view){
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mLastX = event.getX();
+                mLastY = event.getY();
+                mPointAdded = true;
+                break;
+        }
+        return true;
+    }
 
+    public void onRemoveButtonClick(View view){
+        if (!mPoints.isEmpty()) {
+            mPoints.remove(mPoints.size() - 1);
+            mRenderer.removePoint();
+            updateDistance();
+        }
+    }
+
+    public void updateDistance() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                double totalDistance = 0.0;
+                if (mPoints.size() >= 2)  {
+                    for (int i = 0; i < mPoints.size() - 1; i++) {
+                        float[] start = mPoints.get(i);
+                        float[] end = mPoints.get(i + 1);
+
+                        double distance = Math.sqrt(
+                                (start[0] - end[0]) * (start[0] - end[0])
+                                        + (start[1] - end[1]) * (start[1] - end[1])
+                                        + (start[2] - end[2]) * (start[2] - end[2]));
+                        totalDistance += distance;
+                    }
+                }
+                String distanceString = String.format(Locale.getDefault(),
+                        "%.2f", totalDistance)
+                        + getString(R.string.txt_dist);
+                mTextView.setText(distanceString);
+            }
+        });
     }
 
     private void requestCameraPermission(){
