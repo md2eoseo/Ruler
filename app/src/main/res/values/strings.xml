@@ -7,8 +7,15 @@
     <string name="activity_locate_label">모델 배치</string>
     <string name="btn_remove">제거</string>
     <string name="txt_dist">미터</string>
-    <string name="not_selected">asdf</string>
     <string name="table">테이블</string>
     <string name="chair">의자</string>
     <string name="bed">침대</string>
+    <string name="not_selected">Not selected</string>
+    <string name="table_selected">Table selected.</string>
+    <string name="chair_selected">Chair selected.</string>
+    <string name="bed_selected">Bed selected.</string>
+    <string name="not_valid_position">Not valid position.</string>
+    <string name="table_put">Table put.</string>
+    <string name="chair_put">Chair put.</string>
+    <string name="bed_put">Bed put.</string>
 </resources>

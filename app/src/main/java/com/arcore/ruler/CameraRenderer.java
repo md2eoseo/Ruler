@@ -10,8 +10,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-public class CameraPreview {
-    private static final String TAG = CameraPreview.class.getSimpleName();
+public class CameraRenderer {
+    private static final String TAG = CameraRenderer.class.getSimpleName();
 
     private final String vertexShaderString =
             "attribute vec4 aPosition;\n" +
@@ -46,7 +46,7 @@ public class CameraPreview {
     private FloatBuffer mTexCoordsTransformed;
     private int mProgram;
 
-    public CameraPreview() {
+    public CameraRenderer() {
         mVertices = ByteBuffer.allocateDirect(QUAD_COORDS.length * Float.SIZE / 8).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mVertices.put(QUAD_COORDS);
         mVertices.position(0);

@@ -24,7 +24,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     private int mViewportWidth;
     private int mViewportHeight;
 
-    private CameraPreview mCamera;
+    private CameraRenderer mCamera;
     private PointCloudRenderer mPointCloud;
 
     private PlaneRenderer mPlane;
@@ -50,14 +50,14 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     }
 
     public MainRenderer(RenderCallback callback) {
-        mCamera = new CameraPreview();
+        mCamera = new CameraRenderer();
         mPointCloud = new PointCloudRenderer();
 
         mRenderCallback = callback;
     }
 
     public MainRenderer(Context context, RenderCallback callback) {
-        mCamera = new CameraPreview();
+        mCamera = new CameraRenderer();
         mPointCloud = new PointCloudRenderer();
 
         mPlane = new PlaneRenderer(Color.GRAY, 0.5f);
