@@ -1,5 +1,5 @@
 package com.arcore.ruler;
-
+//주석
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
