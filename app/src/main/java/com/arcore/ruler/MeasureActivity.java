@@ -76,7 +76,7 @@ public class MeasureActivity extends Activity {
             }, null);
         }
 
-        mRenderer = new MainRenderer(new MainRenderer.RenderCallback() {
+        mRenderer = new MainRenderer(this, new MainRenderer.RenderCallback() {
             @Override
             public void preRender() {
                 if (mRenderer.isViewportChanged()) {

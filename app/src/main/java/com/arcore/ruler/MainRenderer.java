@@ -79,11 +79,11 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         mCamera.init();
         mPointCloud.init();
 
-//        mPlane.init();
-//
-//        mTable.init();
-//        mChair.init();
-//        mBed.init();
+        mPlane.init();
+
+        mTable.init();
+        mChair.init();
+        mBed.init();
     }
 
     @Override
@@ -105,6 +105,8 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         GLES20.glDepthMask(true);
 
         mPointCloud.draw();
+
+        mPlane.draw();
 
         for (int i = 0; i < mSpheres.size(); i++) {
             Sphere sphere = mSpheres.get(i);
@@ -188,10 +190,10 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
         mPointCloud.setProjectionMatrix(matrix);
 
-//        mPlane.setProjectionMatrix(matrix);
-//        mTable.setProjectionMatrix(matrix);
-//        mChair.setProjectionMatrix(matrix);
-//        mBed.setProjectionMatrix(matrix);
+        mPlane.setProjectionMatrix(matrix);
+        mTable.setProjectionMatrix(matrix);
+        mChair.setProjectionMatrix(matrix);
+        mBed.setProjectionMatrix(matrix);
     }
 
     public void updateViewMatrix(float[] matrix) {
