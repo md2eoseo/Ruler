@@ -114,8 +114,8 @@ public class MeasureActivity extends Activity {
                 float[] viewMatrix = new float[16];
                 camera.getViewMatrix(viewMatrix, 0);
 
-                mRenderer.setProjectionMatrix(projMatrix);
-                mRenderer.updateViewMatrix(viewMatrix);
+//                mRenderer.setProjectionMatrix(projMatrix);
+//                mRenderer.updateViewMatrix(viewMatrix);
             }
         });
         mSurfaceView.setPreserveEGLContextOnPause(true);

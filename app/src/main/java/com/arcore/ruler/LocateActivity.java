@@ -3,6 +3,7 @@ package com.arcore.ruler;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.hardware.display.DisplayManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -17,8 +18,12 @@ import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
+import com.google.ar.core.Plane;
 import com.google.ar.core.PointCloud;
 import com.google.ar.core.Session;
+import com.google.ar.core.TrackingState;
+
+import java.util.Collection;
 
 public class LocateActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -41,7 +46,27 @@ public class LocateActivity extends Activity {
         mTextView = (TextView) findViewById(R.id.txt_locate);
         mSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
 
-        mRenderer = new MainRenderer(new MainRenderer.RenderCallback(){
+        DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+        if (displayManager != null) {
+            displayManager.registerDisplayListener(new DisplayManager.DisplayListener() {
+                @Override
+                public void onDisplayAdded(int displayId) {
+                }
+
+                @Override
+                public void onDisplayChanged(int displayId) {
+                    synchronized (this) {
+                        mRenderer.onDisplayChanged();
+                    }
+                }
+
+                @Override
+                public void onDisplayRemoved(int displayId) {
+                }
+            }, null);
+        }
+
+        mRenderer = new MainRenderer(this, new MainRenderer.RenderCallback(){
             @Override
             public void preRender() {
                 if (mRenderer.isViewportChanged()) {
@@ -72,6 +97,14 @@ public class LocateActivity extends Activity {
 //                    }
 //                    mPointAdded = false;
 //                }
+
+                Collection<Plane> planes = mSession.getAllTrackables(Plane.class);
+                for(Plane plane : planes){
+                    if(plane.getTrackingState() == TrackingState.TRACKING
+                            && plane.getSubsumedBy() == null){
+//                        mRenderer.updatePlane(plane);
+                    }
+                }
 
                 Camera camera = frame.getCamera();
                 float[] projMatrix = new float[16];
