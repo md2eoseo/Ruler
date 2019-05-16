@@ -18,15 +18,12 @@ import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
 import com.google.ar.core.Config;
 import com.google.ar.core.Frame;
-import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.core.PointCloud;
-import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
 import com.google.ar.core.TrackingState;
 
 import java.util.Collection;
-import java.util.List;
 
 public class LocateActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
