@@ -7,4 +7,8 @@
     <string name="activity_locate_label">모델 배치</string>
     <string name="btn_remove">제거</string>
     <string name="txt_dist">미터</string>
+    <string name="not_selected">asdf</string>
+    <string name="table">테이블</string>
+    <string name="chair">의자</string>
+    <string name="bed">침대</string>
 </resources>

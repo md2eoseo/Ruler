@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.arcore.ruler.LocateActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <android.opengl.GLSurfaceView
+        android:id="@+id/gl_surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_locate"
+            android:text="@string/not_selected"
+            android:textSize="30sp"
+            android:textColor="#ffff0000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom|end">
+
+        <Button
+            android:layout_width="80sp"
+            android:layout_height="50sp"
+            android:text="@string/table"
+            android:onClick="onTableButtonClicked"/>
+        <Button
+            android:layout_width="80sp"
+            android:layout_height="50sp"
+            android:text="@string/chair"
+            android:onClick="onChairButtonClicked"/>
+        <Button
+            android:layout_width="80sp"
+            android:layout_height="50sp"
+            android:text="@string/bed"
+            android:onClick="onBedButtonClicked"/>
+
+    </LinearLayout>
+
+</FrameLayout>
