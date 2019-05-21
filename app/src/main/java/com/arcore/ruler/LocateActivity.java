@@ -536,12 +536,6 @@ public class LocateActivity extends Activity {
         v[2] /= norm;
     }
 
-    private void hideStatusBarAndTitleBar(){
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    }
-
     public void onTableButtonClicked(View view) {
         mSelectedModel = TABLE;
         mTextView.setText(getString(R.string.table_selected));
@@ -555,5 +549,13 @@ public class LocateActivity extends Activity {
     public void onBedButtonClicked(View view) {
         mSelectedModel = BED;
         mTextView.setText(getString(R.string.bed_selected));
+    }
+
+    private void hideStatusBarAndTitleBar(){
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 }
