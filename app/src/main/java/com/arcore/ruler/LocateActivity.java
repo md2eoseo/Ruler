@@ -1,5 +1,5 @@
 package com.arcore.ruler;
-//주석
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -17,6 +17,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.ar.core.ArCoreApk;
@@ -42,6 +43,7 @@ public class LocateActivity extends Activity {
 
     private TextView mTextView;
     private GLSurfaceView mSurfaceView;
+    private Button btn_capture;
 
     private MainRenderer mRenderer;
 
@@ -80,6 +82,7 @@ public class LocateActivity extends Activity {
 
         mTextView = (TextView) findViewById(R.id.txt_locate);
         mSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
+        btn_capture = (Button) findViewById(R.id.btn_capture_locate);
 
         final DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
         if (displayManager != null) {
@@ -418,6 +421,13 @@ public class LocateActivity extends Activity {
         mSurfaceView.setEGLContextClientVersion(2);
         mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mSurfaceView.setRenderer(mRenderer);
+
+        btn_capture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
