@@ -19,20 +19,20 @@ public class PlaneRenderer {
 
     private final String vertexShaderString =
             "uniform mat4 uMvpMatrix;\n" +
-            "uniform vec4 uColor;\n" +
-            "attribute vec3 aPosition;\n" +
-            "varying vec4 vColor;\n" +
-            "void main() {\n" +
-            "   vColor = uColor;\n" +
-            "   gl_Position = uMvpMatrix * vec4(aPosition.xyz, 1.0);\n" +
-            "}";
+                    "uniform vec4 uColor;\n" +
+                    "attribute vec3 aPosition;\n" +
+                    "varying vec4 vColor;\n" +
+                    "void main() {\n" +
+                    "   vColor = uColor;\n" +
+                    "   gl_Position = uMvpMatrix * vec4(aPosition.xyz, 1.0);\n" +
+                    "}";
 
     private final String fragmentShaderString =
             "precision mediump float;\n" +
-            "varying vec4 vColor;\n" +
-            "void main() {\n" +
-            "    gl_FragColor = vColor;\n" +
-            "}";
+                    "varying vec4 vColor;\n" +
+                    "void main() {\n" +
+                    "    gl_FragColor = vColor;\n" +
+                    "}";
 
     private int mProgram;
 
