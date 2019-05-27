@@ -26,15 +26,6 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
     private CameraRenderer mCamera;
     private PointCloudRenderer mPointCloud;
-    private PlaneRenderer mPlane;
-
-    private ObjRenderer mTable;
-    private ObjRenderer mChair;
-    private ObjRenderer mBed;
-
-    private boolean mIsDrawTable = false;
-    private boolean mIsDrawChair = false;
-    private boolean mIsDrawBed = false;
 
     private PlaneRenderer mPlane;
 
@@ -55,7 +46,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     private RenderCallback mRenderCallback;
 
     public interface RenderCallback {
-            void preRender();
+        void preRender();
     }
 
     public MainRenderer(RenderCallback callback) {
@@ -67,19 +58,6 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
     public MainRenderer(Context context, RenderCallback callback) {
         mCamera = new CameraRenderer();
-        mPointCloud = new PointCloudRenderer();
-
-        mPlane = new PlaneRenderer(Color.GRAY, 0.5f);
-
-        mTable = new ObjRenderer(context, "table.obj", "table.jpg");
-        mChair = new ObjRenderer(context, "chair.obj", "chair.jpg");
-        mBed = new ObjRenderer(context, "bed.obj", "bed.jpg");
-
-        mRenderCallback = callback;
-    }
-
-    public MainRenderer(Context context, RenderCallback callback) {
-        mCamera = new CameraPreview();
         mPointCloud = new PointCloudRenderer();
 
         mPlane = new PlaneRenderer(Color.GRAY, 0.5f);
@@ -178,8 +156,8 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
     public void updateSession(Session session, int displayRotation) {
         if (mViewportChanged) {
-                session.setDisplayGeometry(displayRotation, mViewportWidth, mViewportHeight);
-                mViewportChanged = false;
+            session.setDisplayGeometry(displayRotation, mViewportWidth, mViewportHeight);
+            mViewportChanged = false;
         }
     }
 
