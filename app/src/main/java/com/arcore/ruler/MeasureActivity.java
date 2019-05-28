@@ -2,10 +2,14 @@ package com.arcore.ruler;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.hardware.display.DisplayManager;
+import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -14,7 +18,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
@@ -24,8 +30,19 @@ import com.google.ar.core.HitResult;
 import com.google.ar.core.PointCloud;
 import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
+import com.google.ar.core.exceptions.CameraNotAvailableException;
+import com.google.ar.core.exceptions.UnavailableApkTooOldException;
+import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
+import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
+import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
+import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,6 +63,11 @@ public class MeasureActivity extends Activity {
     private float mLastX;
     private float mLastY;
     private boolean mPointAdded = false;
+
+    private Button btn_capture_measure;
+
+    //save Check
+    private Boolean isSaveClick = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +100,7 @@ public class MeasureActivity extends Activity {
 
         mRenderer = new MainRenderer(this, new MainRenderer.RenderCallback() {
             @Override
-            public void preRender() {
+            public void preRender() throws CameraNotAvailableException {
                 if (mRenderer.isViewportChanged()) {
                     Display display = getWindowManager().getDefaultDisplay();
                     int displayRotation = display.getRotation();
@@ -104,6 +126,8 @@ public class MeasureActivity extends Activity {
                         mPoints.add(points);
                         mRenderer.addPoint(points);
                         updateDistance();
+                        //more detail
+                        break;
                     }
                     mPointAdded = false;
                 }
@@ -122,6 +146,25 @@ public class MeasureActivity extends Activity {
         mSurfaceView.setEGLContextClientVersion(2);
         mSurfaceView.setRenderer(mRenderer);
         mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
+
+
+        //save picutre
+        btn_capture_measure = (Button)findViewById(R.id.btn_capture_measure);
+        btn_capture_measure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("hari", "pan button clicked");
+                isSaveClick = true;
+                mRenderer.printOptionEnable = isSaveClick;
+                Toast.makeText(getApplicationContext(), "저장 완료!", Toast.LENGTH_SHORT).show();
+                isSaveClick = false;
+            }
+        });
+
+
+
+
     }
 
     @Override
@@ -154,6 +197,16 @@ public class MeasureActivity extends Activity {
         }
         catch (UnsupportedOperationException e) {
             Log.e(TAG, e.getMessage());
+        } catch (UnavailableApkTooOldException e) {
+            e.printStackTrace();
+        } catch (UnavailableDeviceNotCompatibleException e) {
+            e.printStackTrace();
+        } catch (UnavailableUserDeclinedInstallationException e) {
+            e.printStackTrace();
+        } catch (UnavailableArcoreNotInstalledException e) {
+            e.printStackTrace();
+        } catch (UnavailableSdkTooOldException e) {
+            e.printStackTrace();
         }
 
         mConfig = new Config(mSession);
@@ -161,7 +214,11 @@ public class MeasureActivity extends Activity {
             Log.d(TAG, "This device is not support ARCore.");
         }
         mSession.configure(mConfig);
-        mSession.resume();
+        try {
+            mSession.resume();
+        } catch (CameraNotAvailableException e) {
+            e.printStackTrace();
+        }
 
         mSurfaceView.onResume();
     }

@@ -1,17 +1,33 @@
 package com.arcore.ruler;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.os.Environment;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.ar.core.Frame;
 import com.google.ar.core.Plane;
 import com.google.ar.core.PointCloud;
 import com.google.ar.core.Session;
+import com.google.ar.core.exceptions.CameraNotAvailableException;
 
+import org.w3c.dom.Text;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -45,8 +61,13 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
     private RenderCallback mRenderCallback;
 
+    ///
+    protected boolean printOptionEnable = false;
+
+
+
     public interface RenderCallback {
-            void preRender();
+            void preRender() throws CameraNotAvailableException;
     }
 
     public MainRenderer(RenderCallback callback) {
@@ -96,9 +117,15 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        mRenderCallback.preRender();
+
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        try {
+            mRenderCallback.preRender();
+        } catch (CameraNotAvailableException e) {
+            e.printStackTrace();
+        }
+
 
         GLES20.glDepthMask(false);
         mCamera.draw();
@@ -132,6 +159,84 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         if (mIsDrawBed) {
             mBed.draw();
         }
+
+
+
+        try {
+            if (printOptionEnable) {
+                printOptionEnable = false ;
+                Log.i("hari", "프린트 가능 상태 체크" + printOptionEnable);
+                int w = mViewportWidth ;
+                int h = mViewportHeight  ;
+
+                Log.i("hari", "위드쓰:"+w+"-----헤이트:"+h);
+
+                int b[]=new int[(int) (w*h)];
+                int bt[]=new int[(int) (w*h)];
+                IntBuffer buffer=IntBuffer.wrap(b);
+                buffer.position(0);
+                GLES20.glReadPixels(0, 0, w, h,GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE, buffer);
+                for(int i=0; i<h; i++)
+                {
+                    //remember, that OpenGL bitmap is incompatible with Android bitmap
+                    //and so, some correction need.
+                    for(int j=0; j<w; j++)
+                    {
+                        int pix=b[i*w+j];
+                        int pb=(pix>>16)&0xff;
+                        int pr=(pix<<16)&0x00ff0000;
+                        int pix1=(pix&0xff00ff00) | pr | pb;
+                        bt[(h-i-1)*w+j]=pix1;
+                    }
+                }
+                Bitmap inBitmap = null ;
+                if (inBitmap == null || !inBitmap.isMutable()
+                        || inBitmap.getWidth() != w || inBitmap.getHeight() != h) {
+                    inBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                }
+                //Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                inBitmap.copyPixelsFromBuffer(buffer);
+                //return inBitmap ;
+                // return Bitmap.createBitmap(bt, w, h, Bitmap.Config.ARGB_8888);
+                inBitmap = Bitmap.createBitmap(bt, w, h, Bitmap.Config.ARGB_8888);
+
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                inBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bos);
+                byte[] bitmapdata = bos.toByteArray();
+                ByteArrayInputStream fis = new ByteArrayInputStream(bitmapdata);
+
+                final Calendar c=Calendar.getInstance();
+                long mytimestamp=c.getTimeInMillis();
+                String timeStamp=String.valueOf(mytimestamp);
+                String myfile="Ruluer_Image_"+timeStamp+".jpeg";
+
+//                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator +
+//                        "printerscreenshots" + File.separator + "image");
+                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
+                dir_image.mkdirs();
+                try {
+                    File tmpFile = new File(dir_image,myfile);
+                    FileOutputStream fos = new FileOutputStream(tmpFile);
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = fis.read(buf)) > 0) {
+                        fos.write(buf, 0, len);
+                    }
+                    fis.close();
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Log.v("hari", "저장경로:"+dir_image.toString());
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 
     public int getTextureId() {

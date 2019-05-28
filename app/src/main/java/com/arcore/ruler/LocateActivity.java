@@ -17,7 +17,9 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
@@ -30,6 +32,12 @@ import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
+import com.google.ar.core.exceptions.CameraNotAvailableException;
+import com.google.ar.core.exceptions.UnavailableApkTooOldException;
+import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
+import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
+import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
+import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
 import java.util.Collection;
 import java.util.List;
@@ -71,6 +79,11 @@ public class LocateActivity extends Activity {
 
     private GestureDetector mGestureDetector;
     private ScaleGestureDetector mScaleDetector;
+
+    private Button btn_capture_locate;
+
+    //save Check
+    private Boolean isSaveClick = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +158,7 @@ public class LocateActivity extends Activity {
 
         mRenderer = new MainRenderer(this, new MainRenderer.RenderCallback(){
             @Override
-            public void preRender() {
+            public void preRender() throws CameraNotAvailableException {
                 if (mRenderer.isViewportChanged()) {
                     Display display = getWindowManager().getDefaultDisplay();
                     int displayRotation = display.getRotation();
@@ -418,6 +431,23 @@ public class LocateActivity extends Activity {
         mSurfaceView.setEGLContextClientVersion(2);
         mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mSurfaceView.setRenderer(mRenderer);
+
+
+        //save picutre
+        btn_capture_locate = (Button)findViewById(R.id.btn_capture_locate);
+        btn_capture_locate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("hari", "pan button clicked");
+                isSaveClick = true;
+                mRenderer.printOptionEnable = isSaveClick;
+                Toast.makeText(getApplicationContext(), "저장 완료!", Toast.LENGTH_SHORT).show();
+                isSaveClick = false;
+            }
+        });
+
+
+
     }
 
     @Override
@@ -463,6 +493,16 @@ public class LocateActivity extends Activity {
         }
         catch (UnsupportedOperationException e) {
             Log.e(TAG, e.getMessage());
+        } catch (UnavailableApkTooOldException e) {
+            e.printStackTrace();
+        } catch (UnavailableDeviceNotCompatibleException e) {
+            e.printStackTrace();
+        } catch (UnavailableUserDeclinedInstallationException e) {
+            e.printStackTrace();
+        } catch (UnavailableArcoreNotInstalledException e) {
+            e.printStackTrace();
+        } catch (UnavailableSdkTooOldException e) {
+            e.printStackTrace();
         }
 
         mConfig = new Config(mSession);
@@ -470,7 +510,11 @@ public class LocateActivity extends Activity {
             Log.d(TAG, "This device is not support ARCore.");
         }
         mSession.configure(mConfig);
-        mSession.resume();
+        try {
+            mSession.resume();
+        } catch (CameraNotAvailableException e) {
+            e.printStackTrace();
+        }
 
         mSurfaceView.onResume();
         mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
