@@ -26,8 +26,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.IntBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -63,7 +65,6 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
     ///
     protected boolean printOptionEnable = false;
-
 
 
     public interface RenderCallback {
@@ -161,7 +162,6 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         }
 
 
-
         try {
             if (printOptionEnable) {
                 printOptionEnable = false ;
@@ -205,13 +205,15 @@ public class MainRenderer implements GLSurfaceView.Renderer {
                 byte[] bitmapdata = bos.toByteArray();
                 ByteArrayInputStream fis = new ByteArrayInputStream(bitmapdata);
 
-                final Calendar c=Calendar.getInstance();
-                long mytimestamp=c.getTimeInMillis();
-                String timeStamp=String.valueOf(mytimestamp);
-                String myfile="Ruluer_Image_"+timeStamp+".jpeg";
 
-//                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator +
-//                        "printerscreenshots" + File.separator + "image");
+                //현재 날짜로 이미지 저장
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+                Date currentTime_1 = new Date();
+                String dateString = formatter.format(currentTime_1);
+                String myfile="Ruluer_Image_"+dateString+".jpeg";
+
+
+//                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "printerscreenshots" + File.separator + "image");
                 File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
                 dir_image.mkdirs();
                 try {
