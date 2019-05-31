@@ -3,7 +3,6 @@ package com.arcore.ruler;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.hardware.display.DisplayManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
@@ -27,8 +25,6 @@ import com.google.ar.core.HitResult;
 import com.google.ar.core.PointCloud;
 import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
-import com.tarek360.instacapture.Instacapture;
-import com.tarek360.instacapture.listener.SimpleScreenCapturingListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +36,6 @@ public class MeasureActivity extends Activity {
     private TextView mTextView;
     private GLSurfaceView mSurfaceView;
     private MainRenderer mRenderer;
-    private View mSnackbar;
     private Button btn_capture;
 
     private boolean mUserRequestedInstall = true;
@@ -62,7 +57,6 @@ public class MeasureActivity extends Activity {
 
         mTextView = (TextView) findViewById(R.id.txt_dist);
         mSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
-        mSnackbar = (View) findViewById(R.id.layout_main);
         btn_capture = (Button) findViewById(R.id.btn_capture_measure);
 
         DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
@@ -135,12 +129,7 @@ public class MeasureActivity extends Activity {
         btn_capture.setOnClickListener(new View.OnClickListener() {
                 @Override
             public void onClick(View v) {
-                Instacapture.INSTANCE.capture(MeasureActivity.this, new SimpleScreenCapturingListener() {
-                    @Override
-                    public void onCaptureComplete(Bitmap bitmap) {
-                        Toast.makeText(MeasureActivity.this, "오오오오오옹", Toast.LENGTH_SHORT).show();
-                    }
-                }, null);
+
             }
         });
     }

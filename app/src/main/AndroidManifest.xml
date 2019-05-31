@@ -3,6 +3,7 @@
     package="com.arcore.ruler">
 
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
 
@@ -26,6 +27,10 @@
 
         <activity android:name=".LocateActivity"
             android:label="@string/activity_locate_label">
+        </activity>
+
+        <activity android:name=".GalleryActivity"
+            android:label="@string/activity_gallery_label">
         </activity>
         <meta-data android:name="com.google.ar.core" android:value="required"/>
     </application>

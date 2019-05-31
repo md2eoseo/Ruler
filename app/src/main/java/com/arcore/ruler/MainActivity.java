@@ -8,8 +8,10 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int IMAGE_GALLERY_REQUEST = 20;
     Button btn_measure;
     Button btn_locate;
+    Button btn_gallery;
     Button btn_exit;
 
 
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         btn_measure = (Button)findViewById(R.id.btn_measure);
         btn_locate = (Button)findViewById(R.id.btn_locate);
+        btn_gallery = (Button)findViewById(R.id.btn_gallery);
         btn_exit = (Button)findViewById(R.id.btn_exit);
 
         btn_measure.setOnClickListener(new View.OnClickListener() {
@@ -37,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        btn_gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), GalleryActivity.class);
+                startActivity(intent);
+            }
+        });
         btn_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,4 +54,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    /*public void onGalleryClicked(View v) {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+
+        File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        String pictureDirectoryPath = pictureDirectory.getPath();
+
+        Uri data = Uri.parse(pictureDirectoryPath);
+
+        photoPickerIntent.setDataAndType(data, "image/*");
+
+        startActivityForResult(photoPickerIntent, IMAGE_GALLERY_REQUEST);
+    }*/
 }

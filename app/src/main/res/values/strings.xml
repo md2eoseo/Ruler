@@ -18,4 +18,6 @@
     <string name="table_put">Table put.</string>
     <string name="chair_put">Chair put.</string>
     <string name="bed_put">Bed put.</string>
+    <string name="btn_gallery">갤러리</string>
+    <string name="activity_gallery_label">갤러리</string>
 </resources>
