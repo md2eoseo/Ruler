@@ -40,13 +40,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//        btn_gallery.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(), GalleryActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        btn_gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), GalleryActivity.class);
+                startActivity(intent);
+            }
+        });
         btn_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
