@@ -45,6 +45,9 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
     private RenderCallback mRenderCallback;
 
+    ///
+    protected boolean printOptionEnable = false;
+
     public interface RenderCallback {
             void preRender();
     }
