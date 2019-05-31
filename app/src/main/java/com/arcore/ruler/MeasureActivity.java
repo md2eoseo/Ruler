@@ -67,7 +67,7 @@ public class MeasureActivity extends Activity {
     private float mLastY;
     private boolean mPointAdded = false;
 
-    private Button btn_capture_measure;
+//    private Button btn_capture_measure;
 
     //save Check
     private Boolean isSaveClick = false;
@@ -152,16 +152,16 @@ public class MeasureActivity extends Activity {
 
 
         //save picutre
-        btn_capture_measure = (Button)findViewById(R.id.btn_capture_measure);
-        btn_capture_measure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v("hari", "pan button clicked");
-                isSaveClick = true;
-                mRenderer.printOptionEnable = isSaveClick;
-                Toast.makeText(getApplicationContext(), "저장 완료!", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        btn_capture_measure = (Button)findViewById(R.id.btn_capture_measure);
+//        btn_capture_measure.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.v("hari", "pan button clicked");
+//                isSaveClick = true;
+//                mRenderer.printOptionEnable = isSaveClick;
+//                Toast.makeText(getApplicationContext(), "저장 완료!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
     }
@@ -259,8 +259,7 @@ public class MeasureActivity extends Activity {
                         totalDistance += distance;
                     }
                 }
-                String distanceString = String.format(Locale.getDefault(),
-                        "%.2f", totalDistance)
+                String distanceString = String.format(Locale.getDefault(), "%.2f", totalDistance)
                         + getString(R.string.txt_dist);
                 mTextView.setText(distanceString);
             }

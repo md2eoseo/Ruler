@@ -41,12 +41,17 @@ import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationExceptio
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class LocateActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean mUserRequestedInstall = true;
+
+    private TextView locate_rotate;
+    private TextView locate_scale;
+
 
     private TextView mTextView;
     private GLSurfaceView mSurfaceView;
@@ -78,10 +83,10 @@ public class LocateActivity extends Activity {
     private float[] mBedModelMatrix = new float[16];
 
     private boolean[] mModelInit = { false, false, false };
-    private boolean[] mModelPut = { false, false, false };
+    private boolean[] mModelPut = { false, false, false }; //모델이 놓여져 있는지 여부
 
 
-    //더블탭하여 위치를 지정해주는 변수. false일 경우에는 위치 지정x, true일 경우에는 위치 지정
+    //더블탭시 발동하는 스위치 변수. false일 경우에는 위치 지정x, true일 경우에는 위치 지정
     private boolean mIsPut = false;
 
     private GestureDetector mGestureDetector; //가구회전 변수
@@ -100,6 +105,10 @@ public class LocateActivity extends Activity {
 
         mTextView = (TextView) findViewById(R.id.txt_locate);
         mSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
+
+        locate_rotate = (TextView) findViewById(R.id.locate_rotate);
+        locate_scale = (TextView) findViewById(R.id.locate_scale);
+
 
         final DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
         if (displayManager != null) {
@@ -126,15 +135,14 @@ public class LocateActivity extends Activity {
                         public boolean onSingleTapUp(MotionEvent event) {
                             mCurrentX = event.getX();
                             mCurrentY = event.getY();
+
                             return true;
                         }
                         @Override
                         public boolean onDoubleTap(MotionEvent event) {
-
                             //mIsPut은 false로 들어옴
                             mCurrentX = event.getX();
                             mCurrentY = event.getY();
-
                             mIsPut = true;
 
                             return true;
@@ -146,7 +154,13 @@ public class LocateActivity extends Activity {
                             //물체의 방향이 실시간으로 조절되는 기능
                             if (mSelectedModel != -1) {
                                 mRotateFactor -= (distanceX / 10);
+                                mRotateFactor%=360;
+                                if(mRotateFactor<0){
+                                    mRotateFactor += 360;
+                                }
                                 Matrix.rotateM(mModelMatrix, 0, -distanceX / 10, 0.0f, 1.0f, 0.0f);
+                                String rotateFactor = String.format(Locale.getDefault(), "방향 : %d도", (int)mRotateFactor);
+                                locate_rotate.setText(rotateFactor);
                             }
                             return true;
                         }
@@ -154,10 +168,12 @@ public class LocateActivity extends Activity {
             mScaleDetector = new ScaleGestureDetector(this, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
                         @Override
                         public boolean onScale(ScaleGestureDetector detector) {
-                            mScaleFactor *= detector.getScaleFactor();
-
                             //크기가 실시간으로 조절되는 기능
                             if (mSelectedModel != -1) {
+                                mScaleFactor *= detector.getScaleFactor();
+                                String scaleFactor = String.format(Locale.getDefault(), "크기 : %.2f배율", mScaleFactor*100 );
+                                locate_scale.setText(scaleFactor);
+
                                 Matrix.scaleM(mModelMatrix, 0,
                                         detector.getScaleFactor(),
                                         detector.getScaleFactor(),
@@ -207,9 +223,9 @@ public class LocateActivity extends Activity {
                         if (!mModelInit[TABLE]) {
                             float position[] = calculateInitialPosition(mRenderer.getWidth(), mRenderer.getHeight(), projMatrix, viewMatrix);
 
-                            Matrix.setIdentityM(mModelMatrix, 0);
-                            Matrix.translateM(mModelMatrix, 0, position[0], position[1], position[2]);
-                            Matrix.scaleM(mModelMatrix, 0, 0.02f, 0.02f, 0.02f);
+                            Matrix.setIdentityM(mModelMatrix, 0); //단위행렬 생성. 매트릭스를 만들어냄 -> 오브젝트가 생성되도록 하는 기능
+                            Matrix.translateM(mModelMatrix, 0, position[0], position[1], position[2]); // 평행이동 행렬 : 포지션값만큼 평행이동. 왜 있는 기능인지?
+                            Matrix.scaleM(mModelMatrix, 0, 0.02f, 0.02f, 0.02f); // 자기 위치에 생기는 사물의 초기 크기를 인위적으로 잡아줌. 사실 필요없음.
 
                             mModelInit[TABLE] = true;
                             mModelPut[TABLE] = false;
@@ -218,7 +234,7 @@ public class LocateActivity extends Activity {
                             mRenderer.setTableModelMatrix(mModelMatrix);
                         }
                         mRenderer.setModelDraw(true, mModelPut[CHAIR], mModelPut[BED]);
-                        if (mModelInit[CHAIR] && !mModelPut[CHAIR]) {
+                        if (mModelInit[CHAIR] && !mModelPut[CHAIR]) { //init:true, put:false 일 시
                             mModelInit[CHAIR] = false;
                         }
                         if (mModelInit[BED] && !mModelPut[BED]) {
@@ -277,6 +293,8 @@ public class LocateActivity extends Activity {
                         break;
                 }
 
+
+                //<<더블탭 이벤트 발생 시>> mIsPut이 true가 되며 아래 이벤트가 발생.
                 if (mIsPut) {
                     List<HitResult> results = frame.hitTest(mCurrentX, mCurrentY);
                     //HitTest를 하여 result를 가져옴. 만약 평면이 존재하면 그 위치에 물체를 놓음
@@ -287,8 +305,8 @@ public class LocateActivity extends Activity {
                         pose.toMatrix(modelMatrix, 0);
 
                         //지정한 방향과 크기를 적용하는 함수를 사용.
-                        Matrix.scaleM(modelMatrix, 0, mScaleFactor, mScaleFactor, mScaleFactor);
-                        Matrix.rotateM(modelMatrix, 0, mRotateFactor, 0.0f, 1.0f, 0.0f);
+                        Matrix.scaleM(modelMatrix, 0, mScaleFactor, mScaleFactor, mScaleFactor); // 확대/축소 행렬 : 지정된 배수만큼 확대/축소
+                        Matrix.rotateM(modelMatrix, 0, mRotateFactor, 0.0f, 1.0f, 0.0f); // 비율만큼 회전 ( 매트릭스, 배열시작점 보통0, 회전각, 회전벡터)
 
                         mScaleFactor = 0.02f;
                         if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(result.getHitPose())) {
@@ -297,12 +315,14 @@ public class LocateActivity extends Activity {
                                     if (!mModelPut[TABLE]) {
                                         mModelPut[TABLE] = true;
 
-                                        //회전과 크기 변환을 막는 기능
+                                        //회전과 크기 변환을 막는 기능. 단, 주석처리 할 경우 원하는 위치에 놓였다가 바로 사라짐.
                                         mSelectedModel = -1;
 
                                         System.arraycopy(modelMatrix, 0, mTableModelMatrix, 0, 16);
-                                        Matrix.setIdentityM(mModelMatrix, 0);
+                                        Matrix.setIdentityM(mModelMatrix, 0); // 왜 있는지 모르겠음. 없어도 작동 잘 됨
+
                                         mIsPut = false;
+
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -423,6 +443,8 @@ public class LocateActivity extends Activity {
                     mIsPut = false;
                 }
 
+
+                //원하는 사물을 해당 위치에 배치
                 if (mModelPut[TABLE]) {
                     mRenderer.setTableModelMatrix(mTableModelMatrix);
                     mRenderer.updateTableViewMatrix(viewMatrix);
@@ -602,6 +624,11 @@ public class LocateActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+
+//    public void onSelectedButtonClicked(View view) {
+//        mSelectedModel=-1;
+//        mTextView.setText(getString(R.string.selected_complete_btn_order));
+//    }
 
     public void onTableButtonClicked(View view) {
         mSelectedModel = TABLE;

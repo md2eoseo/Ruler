@@ -13,6 +13,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -20,6 +21,22 @@
             android:text="@string/not_selected"
             android:textSize="30sp"
             android:textColor="#ffff0000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/locate_rotate"
+            android:text="@string/txt_roate"
+            android:textSize="30sp"
+            android:textColor="#ff00FD00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/locate_scale"
+            android:text="@string/txt_scale"
+            android:textSize="30sp"
+            android:textColor="#ff00FD00"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -38,6 +55,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="bottom|end">
+
+        <!--<Button-->
+            <!--android:layout_width="80sp"-->
+            <!--android:layout_height="50sp"-->
+            <!--android:text="@string/selected_complete"-->
+            <!--android:onClick="onSelectedButtonClicked"/>-->
 
         <Button
             android:layout_width="80sp"
