@@ -5,6 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:id="@+id/measure_capture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <android.opengl.GLSurfaceView
         android:id="@+id/gl_surface_view"
         android:layout_width="match_parent"
@@ -23,6 +28,7 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+    </FrameLayout>
 
     <Button
         android:id="@+id/btn_capture_measure"
