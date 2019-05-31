@@ -56,8 +56,10 @@ public class LocateActivity extends Activity {
     private Session mSession;
     private Config mConfig;
 
+    // 선택한 좌표를 표현하는 변수
     private float mCurrentX;
     private float mCurrentY;
+
     private float mScaleFactor = 0.02f;
     private float mRotateFactor = 0.0f;
 
@@ -65,7 +67,10 @@ public class LocateActivity extends Activity {
     private final int CHAIR = 1;
     private final int BED = 2;
 
+
+    //물체가 회전 하는지의 여부를 결정 + 어떤 물체가 선택되었는지를 결정하는 변수
     private int mSelectedModel = -1;
+
     private float[] mModelMatrix = new float[16];
 
     private float[] mTableModelMatrix = new float[16];
@@ -75,21 +80,23 @@ public class LocateActivity extends Activity {
     private boolean[] mModelInit = { false, false, false };
     private boolean[] mModelPut = { false, false, false };
 
+
+    //더블탭하여 위치를 지정해주는 변수. false일 경우에는 위치 지정x, true일 경우에는 위치 지정
     private boolean mIsPut = false;
 
-    private GestureDetector mGestureDetector;
-    private ScaleGestureDetector mScaleDetector;
+    private GestureDetector mGestureDetector; //가구회전 변수
+    private ScaleGestureDetector mScaleDetector; // 가구 크기조절 변수
 
-    private Button btn_capture_locate;
+        private Button btn_capture_locate;
 
-    //save Check
-    private Boolean isSaveClick = false;
+        //save Check
+        private Boolean isSaveClick = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        hideStatusBarAndTitleBar();
-        setContentView(R.layout.activity_locate);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            hideStatusBarAndTitleBar();
+            setContentView(R.layout.activity_locate);
 
         mTextView = (TextView) findViewById(R.id.txt_locate);
         mSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
@@ -123,6 +130,8 @@ public class LocateActivity extends Activity {
                         }
                         @Override
                         public boolean onDoubleTap(MotionEvent event) {
+
+                            //mIsPut은 false로 들어옴
                             mCurrentX = event.getX();
                             mCurrentY = event.getY();
 
@@ -133,6 +142,8 @@ public class LocateActivity extends Activity {
                         @Override
                         public boolean onScroll(MotionEvent e1, MotionEvent e2,
                                                 float distanceX, float distanceY) {
+
+                            //물체의 방향이 실시간으로 조절되는 기능
                             if (mSelectedModel != -1) {
                                 mRotateFactor -= (distanceX / 10);
                                 Matrix.rotateM(mModelMatrix, 0, -distanceX / 10, 0.0f, 1.0f, 0.0f);
@@ -140,11 +151,12 @@ public class LocateActivity extends Activity {
                             return true;
                         }
                     });
-            mScaleDetector = new ScaleGestureDetector(this,
-                    new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            mScaleDetector = new ScaleGestureDetector(this, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
                         @Override
                         public boolean onScale(ScaleGestureDetector detector) {
                             mScaleFactor *= detector.getScaleFactor();
+
+                            //크기가 실시간으로 조절되는 기능
                             if (mSelectedModel != -1) {
                                 Matrix.scaleM(mModelMatrix, 0,
                                         detector.getScaleFactor(),
@@ -193,8 +205,7 @@ public class LocateActivity extends Activity {
                 switch (mSelectedModel) {
                     case TABLE:
                         if (!mModelInit[TABLE]) {
-                            float position[] = calculateInitialPosition(mRenderer.getWidth(),
-                                    mRenderer.getHeight(), projMatrix, viewMatrix);
+                            float position[] = calculateInitialPosition(mRenderer.getWidth(), mRenderer.getHeight(), projMatrix, viewMatrix);
 
                             Matrix.setIdentityM(mModelMatrix, 0);
                             Matrix.translateM(mModelMatrix, 0, position[0], position[1], position[2]);
@@ -207,7 +218,6 @@ public class LocateActivity extends Activity {
                             mRenderer.setTableModelMatrix(mModelMatrix);
                         }
                         mRenderer.setModelDraw(true, mModelPut[CHAIR], mModelPut[BED]);
-
                         if (mModelInit[CHAIR] && !mModelPut[CHAIR]) {
                             mModelInit[CHAIR] = false;
                         }
@@ -269,21 +279,27 @@ public class LocateActivity extends Activity {
 
                 if (mIsPut) {
                     List<HitResult> results = frame.hitTest(mCurrentX, mCurrentY);
+                    //HitTest를 하여 result를 가져옴. 만약 평면이 존재하면 그 위치에 물체를 놓음
                     for (HitResult result : results) {
                         Trackable trackable = result.getTrackable();
-                        Pose pose = result.getHitPose();
+                        Pose pose = result.getHitPose(); // hit된 result를 pose객체에 대입
                         float[] modelMatrix = new float[16];
                         pose.toMatrix(modelMatrix, 0);
+
+                        //지정한 방향과 크기를 적용하는 함수를 사용.
                         Matrix.scaleM(modelMatrix, 0, mScaleFactor, mScaleFactor, mScaleFactor);
                         Matrix.rotateM(modelMatrix, 0, mRotateFactor, 0.0f, 1.0f, 0.0f);
+
                         mScaleFactor = 0.02f;
-                        if (trackable instanceof Plane
-                                && ((Plane) trackable).isPoseInPolygon(result.getHitPose())) {
+                        if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(result.getHitPose())) {
                             switch (mSelectedModel) {
                                 case TABLE:
                                     if (!mModelPut[TABLE]) {
                                         mModelPut[TABLE] = true;
+
+                                        //회전과 크기 변환을 막는 기능
                                         mSelectedModel = -1;
+
                                         System.arraycopy(modelMatrix, 0, mTableModelMatrix, 0, 16);
                                         Matrix.setIdentityM(mModelMatrix, 0);
                                         mIsPut = false;
@@ -528,8 +544,9 @@ public class LocateActivity extends Activity {
         }
     }
 
-    public float[] calculateInitialPosition(int width, int height,
-                                            float[] projMat, float[] viewMat) {
+
+    //물체가 생성될 위치를 잡아주는 함수
+    public float[] calculateInitialPosition(int width, int height, float[] projMat, float[] viewMat) {
         return getScreenPoint(width / 2, height - 300, width, height, projMat, viewMat);
     }
 
