@@ -180,6 +180,7 @@ public class MeasureActivity extends Activity {
         super.onResume();
 
         requestCameraPermission();
+        requestMemoryPermission();
 
         try {
             if (mSession == null) {
@@ -275,7 +276,13 @@ public class MeasureActivity extends Activity {
                     new String[]{Manifest.permission.CAMERA}, 0);
         }
     }
-
+    private void requestMemoryPermission(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
+    }
     private void hideStatusBarAndTitleBar(){
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

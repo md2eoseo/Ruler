@@ -476,6 +476,7 @@ public class LocateActivity extends Activity {
         super.onResume();
 
         requestCameraPermission();
+        requestMemoryPermission();
 
         try {
             if (mSession == null) {
@@ -525,6 +526,13 @@ public class LocateActivity extends Activity {
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA}, 0);
+        }
+    }
+    private void requestMemoryPermission(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
     }
 

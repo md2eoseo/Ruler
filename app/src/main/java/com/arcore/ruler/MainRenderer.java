@@ -212,7 +212,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
 //                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator +
 //                        "printerscreenshots" + File.separator + "image");
-                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
+                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "/Ruler");
                 dir_image.mkdirs();
                 try {
                     File tmpFile = new File(dir_image,myfile);
