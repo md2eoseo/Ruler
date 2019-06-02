@@ -178,8 +178,6 @@ public class MeasureActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        requestCameraPermission();
-
         try {
             if (mSession == null) {
                 switch (ArCoreApk.getInstance().requestInstall(this, mUserRequestedInstall)) {
@@ -264,14 +262,6 @@ public class MeasureActivity extends Activity {
                 mTextView.setText(distanceString);
             }
         });
-    }
-
-    private void requestCameraPermission(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA}, 0);
-        }
     }
 
     private void hideStatusBarAndTitleBar(){

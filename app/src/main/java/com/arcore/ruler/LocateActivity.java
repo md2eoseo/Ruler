@@ -480,7 +480,6 @@ public class LocateActivity extends Activity {
                 isSaveClick = true;
                 mRenderer.printOptionEnable = isSaveClick;
                 Toast.makeText(getApplicationContext(), "저장 완료!", Toast.LENGTH_SHORT).show();
-                isSaveClick = false;
             }
         });
 
@@ -513,7 +512,6 @@ public class LocateActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        requestCameraPermission();
 
         try {
             if (mSession == null) {
@@ -556,14 +554,6 @@ public class LocateActivity extends Activity {
 
         mSurfaceView.onResume();
         mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-    }
-
-    private void requestCameraPermission(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA}, 0);
-        }
     }
 
 
