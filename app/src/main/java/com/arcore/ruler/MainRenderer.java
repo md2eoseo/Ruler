@@ -8,16 +8,12 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.ar.core.Frame;
 import com.google.ar.core.Plane;
 import com.google.ar.core.PointCloud;
 import com.google.ar.core.Session;
 import com.google.ar.core.exceptions.CameraNotAvailableException;
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,7 +24,6 @@ import java.io.IOException;
 import java.nio.IntBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -209,7 +204,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
                 Date currentTime_1 = new Date();
                 String dateString = formatter.format(currentTime_1);
-                String myfile="Ruluer_Image_"+dateString+".jpeg";
+                String myfile="Ruler_Capture_"+dateString+".jpeg";
 
 
 //                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "printerscreenshots" + File.separator + "image");
