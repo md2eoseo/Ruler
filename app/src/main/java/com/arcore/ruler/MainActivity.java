@@ -48,11 +48,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
-                intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                Intent intent = new Intent(Intent.ACTION_PICK);
+//                intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+//                intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-//                Intent intent = new Intent(getApplicationContext(), GalleryActivity.class);
+                Intent intent = new Intent(getApplicationContext(), GalleryActivity.class);
                 startActivity(intent);
             }
         });

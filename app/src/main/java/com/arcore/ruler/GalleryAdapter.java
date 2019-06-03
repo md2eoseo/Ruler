@@ -8,7 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
@@ -39,10 +42,22 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         }
     }
 
+//    @Override
+//    public void onBindViewHolder(GalleryAdapter.ViewHolder viewHolder, int i) {
+//        viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//        viewHolder.img.setImageResource((galleryList.get(i).getImage_ID()));
+//    }
+
     @Override
     public void onBindViewHolder(GalleryAdapter.ViewHolder viewHolder, int i) {
         viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         viewHolder.img.setImageResource((galleryList.get(i).getImage_ID()));
+
+        CaptureImg item = galleryList.get(i);
+        URI uri = new File(item.getImage_Location()).toURI();
+        Glide.with(viewHolder.img.getContext())
+                .load(uri)
+                .into(viewHolder.img);
     }
 
     @Override
