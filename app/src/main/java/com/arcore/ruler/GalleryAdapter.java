@@ -1,77 +1,40 @@
 package com.arcore.ruler;
 
-import android.content.Context;
-import android.os.Environment;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
-import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
-public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
-    private ArrayList<CaptureImg> galleryList;
-    private Context context;
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryVIewHolder> {
+    List<GalleryItem> items = new ArrayList<>();
+    public void add(GalleryItem data){
+        items.add(data);
+        notifyDataSetChanged();
+    }
 
-    public GalleryAdapter(Context context, ArrayList<CaptureImg> galleryList) {
-        this.galleryList = galleryList;
-        this.context = context;
+    @NonNull
+    @Override
+    public GalleryVIewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_gallery, viewGroup, false);
+
+        return new GalleryVIewHolder(v);
     }
 
     @Override
-    public GalleryAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_gallery_cell, viewGroup, false);
-        return new ViewHolder(view);
-    }
+    public void onBindViewHolder(@NonNull GalleryVIewHolder galleryVIewHolder, int i) {
+       GalleryItem item = items.get(i);
+       Uri uri = Uri.parse(item.getUri());
+       galleryVIewHolder.img.setImageURI(uri);
 
-    private void prepareData(GalleryAdapter.ViewHolder viewHolder){
-        ArrayList<CaptureImg> theimage = new ArrayList<>();
-        String path = Environment.getRootDirectory().toString();
-        File f = new File(path);
-        File file[] = f.listFiles();
-        for (int i = 0; i < file.length; i++)
-        {
-            CaptureImg createList = new CaptureImg();
-            createList.setImage_Location(file[i].getName());
-            //Glide.with().load(createList.getImage_Location()).into(theimage.get(i).);
-        }
-    }
-
-//    @Override
-//    public void onBindViewHolder(GalleryAdapter.ViewHolder viewHolder, int i) {
-//        viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        viewHolder.img.setImageResource((galleryList.get(i).getImage_ID()));
-//    }
-
-    @Override
-    public void onBindViewHolder(GalleryAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        viewHolder.img.setImageResource((galleryList.get(i).getImage_ID()));
-
-        CaptureImg item = galleryList.get(i);
-        URI uri = new File(item.getImage_Location()).toURI();
-        Glide.with(viewHolder.img.getContext())
-                .load(uri)
-                .into(viewHolder.img);
     }
 
     @Override
     public int getItemCount() {
-        return galleryList.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private ImageView img;
-
-        public ViewHolder(View view) {
-            super(view);
-
-            img = (ImageView) view.findViewById(R.id.img);
-        }
+        return items.size();
     }
 }
