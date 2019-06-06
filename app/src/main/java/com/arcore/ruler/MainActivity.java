@@ -7,8 +7,12 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,6 +61,25 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
+        MenuInflater mainInflater = getMenuInflater();
+        mainInflater.inflate(R.menu.main_option, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.a:
+                Toast.makeText(getApplicationContext(), "aaa", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.b:
+                Toast.makeText(getApplicationContext(), "bbb", Toast.LENGTH_LONG).show();
+                return true;
+        }
+        return false;
     }
 
     private void requestCameraPermission(){
