@@ -5,9 +5,8 @@
     <item android:state_focused="false" android:state_pressed="false">
         <shape>
             <solid android:color="#FFFFFF" />
-            <corners android:radius="1000dp" />
-            <padding android:bottom="30dp" android:left="30dp"
-                android:right="30dp" android:top="30dp" />
+            <stroke android:color="#000000" android:width="3dp" />
+            <corners android:radius="10dp" />
         </shape>
     </item>
 
@@ -15,9 +14,8 @@
     <item android:state_focused="false" android:state_pressed="true">
         <shape>
             <solid android:color="#E2E2E2" />
-            <corners android:radius="1000dp" />
-            <padding android:bottom="30dp" android:left="30dp"
-                android:right="30dp" android:top="30dp" />
+            <stroke android:color="#000000" android:width="3dp" />
+            <corners android:radius="10dp" />
         </shape>
     </item>
 
