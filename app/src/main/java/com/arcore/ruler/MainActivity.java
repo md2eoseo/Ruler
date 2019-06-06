@@ -86,10 +86,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.a:
-                Toast.makeText(getApplicationContext(), "aaa", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "노원종/김성태", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.b:
-                Toast.makeText(getApplicationContext(), "bbb", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Ruler v1.0", Toast.LENGTH_LONG).show();
                 return true;
         }
         return false;
