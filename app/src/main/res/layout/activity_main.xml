@@ -24,7 +24,7 @@
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/ruler_logo" />
+            android:src="@drawable/ruler_logo" />
 
         <Button
             android:id="@+id/btn_measure"

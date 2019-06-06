@@ -161,7 +161,7 @@ public class GalleryActivity extends AppCompatActivity {
         viewClickSwitch=false;
 
         if(currentPos==-1){
-            Toast.makeText(getApplicationContext(), "저장된 사진이 없습니다", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "저장된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
             finish();
         }
 
