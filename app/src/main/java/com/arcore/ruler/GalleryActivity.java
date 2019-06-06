@@ -29,7 +29,7 @@ public class GalleryActivity extends AppCompatActivity {
 
     File selectFile;
     int currentPos;
-    boolean setBitmapEvent=true;
+    boolean viewClickSwitch=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +86,7 @@ public class GalleryActivity extends AppCompatActivity {
                     if(imgFiles[pos].exists()) {
                         Bitmap myBitmap = BitmapFactory.decodeFile(imgFiles[pos].getAbsolutePath());
                         picPreview.setImageBitmap(myBitmap);
+                        viewClickSwitch=true;
                     }
 
                     selectFile = imgFiles[pos];
@@ -94,9 +95,8 @@ public class GalleryActivity extends AppCompatActivity {
                     picPreview.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(!setBitmapEvent){
+                            if(viewClickSwitch){
                                 sendFile(imgFiles[pos]);
-                                setBitmapEvent=true;
                             }
                         }
                     });
@@ -158,7 +158,7 @@ public class GalleryActivity extends AppCompatActivity {
         picPreview.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         picPreview.setImageBitmap(null);
-        setBitmapEvent=false;
+        viewClickSwitch=false;
 
         if(currentPos==-1){
             Toast.makeText(getApplicationContext(), "저장된 사진이 없습니다", Toast.LENGTH_SHORT).show();
