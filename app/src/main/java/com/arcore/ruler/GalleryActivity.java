@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -144,5 +143,13 @@ public class GalleryActivity extends AppCompatActivity {
         Gallery gallery = (Gallery) findViewById(R.id.Gallery1);
         MyGalleryAdapter galAdpater = new MyGalleryAdapter(this, imageFiles);
         gallery.setAdapter(galAdpater);
+
+        ImageView picPreview = (ImageView) findViewById(R.id.PicPreview);
+        picPreview.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        if(imageFiles[0].exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imageFiles[0].getAbsolutePath());
+            picPreview.setImageBitmap(myBitmap);
+        }
     }
 }
