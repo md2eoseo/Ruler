@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +28,8 @@ import java.io.File;
 public class GalleryActivity extends AppCompatActivity {
 
     File selectFile;
+    int currentPos;
+    boolean setBitmapEvent=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +89,15 @@ public class GalleryActivity extends AppCompatActivity {
                     }
 
                     selectFile = imgFiles[pos];
+                    currentPos = pos;
 
                     picPreview.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            sendFile(imgFiles[pos]);
+                            if(!setBitmapEvent){
+                                sendFile(imgFiles[pos]);
+                                setBitmapEvent=true;
+                            }
                         }
                     });
 
@@ -113,6 +120,9 @@ public class GalleryActivity extends AppCompatActivity {
             case R.id.delete:
                 selectFile.delete();
                 Toast.makeText(getApplicationContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                if(currentPos==0){
+                    currentPos--;
+                }
                 onResume();
 
                 return true;
@@ -147,9 +157,14 @@ public class GalleryActivity extends AppCompatActivity {
         ImageView picPreview = (ImageView) findViewById(R.id.PicPreview);
         picPreview.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-        if(imageFiles[0].exists()) {
-            Bitmap myBitmap = BitmapFactory.decodeFile(imageFiles[0].getAbsolutePath());
-            picPreview.setImageBitmap(myBitmap);
+        picPreview.setImageBitmap(null);
+        setBitmapEvent=false;
+
+        if(currentPos==-1){
+            Toast.makeText(getApplicationContext(), "저장된 사진이 없습니다", Toast.LENGTH_SHORT).show();
+            finish();
         }
+
+
     }
 }
