@@ -6,7 +6,7 @@
     android:id="@+id/ScrollView1"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".MainActivity"
@@ -26,40 +26,48 @@
             android:contentDescription="@string/app_name"
             android:src="@drawable/ruler_logo" />
 
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="*">
+            <TableRow>
         <Button
             android:id="@+id/btn_measure"
             style="@style/button_style"
             android:text="@string/btn_measure"
             android:background="@drawable/button"
-            android:layout_marginBottom="8dp"
-            android:layout_below="@+id/logo"
-            android:layout_alignStart="@+id/logo" />
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="4dp"/>
 
         <Button
             android:id="@+id/btn_locate"
             style="@style/button_style"
             android:text="@string/btn_locate"
             android:background="@drawable/button"
-            android:layout_marginBottom="8dp"
-            android:layout_below="@+id/logo"
-            android:layout_alignEnd="@+id/logo" />
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="4dp" />
+            </TableRow>
 
+        <TableRow>
         <Button
             android:id="@+id/btn_gallery"
             style="@style/button_style"
             android:text="@string/btn_gallery"
             android:background="@drawable/button"
-            android:layout_below="@+id/btn_measure"
-            android:layout_alignStart="@+id/logo" />
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp" />
 
         <Button
             android:id="@+id/btn_exit"
             style="@style/button_style"
             android:text="@string/exit"
             android:background="@drawable/button"
-            android:layout_below="@+id/btn_locate"
-            android:layout_alignEnd="@+id/logo" />
-    </RelativeLayout>
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp" />
+
+        </TableRow>
+        </TableLayout>
+    </LinearLayout>
 <!--<GridLayout-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent"-->
