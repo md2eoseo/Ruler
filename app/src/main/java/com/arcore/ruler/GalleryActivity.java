@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.util.jar.Attributes;
 
 public class GalleryActivity extends AppCompatActivity {
 
@@ -40,13 +37,6 @@ public class GalleryActivity extends AppCompatActivity {
     public class MyGalleryAdapter extends BaseAdapter {
         Context context;
         File[] imgFiles;
-
-        int[] posterID = {R.drawable.ruler,R.drawable.ruler,
-                R.drawable.ruler,R.drawable.ruler,
-                R.drawable.ruler,R.drawable.ruler,
-                R.drawable.ruler,R.drawable.ruler,
-                R.drawable.ruler,R.drawable.ruler};
-
 
         public MyGalleryAdapter  (Context c, File[] Files) {
             context = c;
