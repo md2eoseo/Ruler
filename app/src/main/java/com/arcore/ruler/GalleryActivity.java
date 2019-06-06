@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,19 +27,13 @@ import java.io.File;
 
 public class GalleryActivity extends AppCompatActivity {
 
+    File selectFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
-        setTitle("Gallery");
-
-        File[] imageFiles;
-        imageFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler").listFiles();
-
-        Gallery gallery = (Gallery) findViewById(R.id.Gallery1);
-        MyGalleryAdapter galAdpater = new MyGalleryAdapter(this, imageFiles);
-        gallery.setAdapter(galAdpater);
+        setTitle("갤러리");
 
     }
 
@@ -91,6 +86,8 @@ public class GalleryActivity extends AppCompatActivity {
                         picPreview.setImageBitmap(myBitmap);
                     }
 
+                    selectFile = imgFiles[pos];
+
                     picPreview.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -114,8 +111,11 @@ public class GalleryActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.share:
-                Toast.makeText(getApplicationContext(), "share", Toast.LENGTH_LONG).show();
+            case R.id.delete:
+                selectFile.delete();
+                Toast.makeText(getApplicationContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                onResume();
+
                 return true;
         }
         return false;
@@ -132,5 +132,17 @@ public class GalleryActivity extends AppCompatActivity {
         intent.setType("image/*"); //jpg 이미지를 공유 하기 위해 Type을 정의합니다.
         intent.putExtra(Intent.EXTRA_STREAM, uri); //사진의 Uri를 가지고 옵니다.
         startActivity(intent); //Activity를 이용하여 호출 합니다.
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        File[] imageFiles;
+        imageFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler").listFiles();
+
+        Gallery gallery = (Gallery) findViewById(R.id.Gallery1);
+        MyGalleryAdapter galAdpater = new MyGalleryAdapter(this, imageFiles);
+        gallery.setAdapter(galAdpater);
     }
 }
