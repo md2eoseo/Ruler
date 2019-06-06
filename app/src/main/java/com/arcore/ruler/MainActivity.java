@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
+        dir_image.mkdirs();
+
         btn_measure = (Button)findViewById(R.id.btn_measure);
         btn_locate = (Button)findViewById(R.id.btn_locate);
         btn_gallery = (Button)findViewById(R.id.btn_gallery);
