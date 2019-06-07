@@ -1,29 +1,16 @@
 package com.arcore.ruler;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.hardware.display.DisplayManager;
-import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Camera;
@@ -40,12 +27,7 @@ import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,8 +48,6 @@ public class MeasureActivity extends Activity {
     private float mLastX;
     private float mLastY;
     private boolean mPointAdded = false;
-
-//    private Button btn_capture_measure;
 
     //save Check
     private Boolean isSaveClick = false;
@@ -149,21 +129,6 @@ public class MeasureActivity extends Activity {
         mSurfaceView.setEGLContextClientVersion(2);
         mSurfaceView.setRenderer(mRenderer);
         mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-
-
-        //save picutre
-//        btn_capture_measure = (Button)findViewById(R.id.btn_capture_measure);
-//        btn_capture_measure.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.v("hari", "pan button clicked");
-//                isSaveClick = true;
-//                mRenderer.printOptionEnable = isSaveClick;
-//                Toast.makeText(getApplicationContext(), "저장 완료!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
     }
 
     @Override

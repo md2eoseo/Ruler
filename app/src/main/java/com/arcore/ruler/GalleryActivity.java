@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -119,12 +118,14 @@ public class GalleryActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.delete:
                 selectFile.delete();
-                Toast.makeText(getApplicationContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
-                if(currentPos==0){
-                    currentPos--;
-                }
-                onResume();
 
+                ImageView picPreview = (ImageView) findViewById(R.id.PicPreview);
+                picPreview.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                picPreview.setImageBitmap(null);
+                viewClickSwitch=false;
+                Toast.makeText(getApplicationContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+
+                onResume();
                 return true;
         }
         return false;
@@ -153,18 +154,6 @@ public class GalleryActivity extends AppCompatActivity {
         Gallery gallery = (Gallery) findViewById(R.id.Gallery1);
         MyGalleryAdapter galAdpater = new MyGalleryAdapter(this, imageFiles);
         gallery.setAdapter(galAdpater);
-
-        ImageView picPreview = (ImageView) findViewById(R.id.PicPreview);
-        picPreview.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
-        picPreview.setImageBitmap(null);
-        viewClickSwitch=false;
-
-        if(currentPos==-1){
-            Toast.makeText(getApplicationContext(), "저장된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
 
     }
 }

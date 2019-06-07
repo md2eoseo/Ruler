@@ -1,14 +1,10 @@
 package com.arcore.ruler;
 //주석
-import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.hardware.display.DisplayManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -476,7 +472,6 @@ public class LocateActivity extends Activity {
         btn_capture_locate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("hari", "pan button clicked");
                 isSaveClick = true;
                 mRenderer.printOptionEnable = isSaveClick;
                 Toast.makeText(getApplicationContext(), "저장 완료!", Toast.LENGTH_SHORT).show();

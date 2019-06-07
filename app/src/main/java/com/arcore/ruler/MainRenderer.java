@@ -57,7 +57,6 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
     private RenderCallback mRenderCallback;
 
-    ///
     protected boolean printOptionEnable = false;
 
 
@@ -159,11 +158,9 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         try {
             if (printOptionEnable) {
                 printOptionEnable = false ;
-                Log.i("hari", "프린트 가능 상태 체크" + printOptionEnable);
+
                 int w = mViewportWidth ;
                 int h = mViewportHeight  ;
-
-                Log.i("hari", "위드쓰:"+w+"-----헤이트:"+h);
 
                 int b[]=new int[(int) (w*h)];
                 int bt[]=new int[(int) (w*h)];
@@ -207,7 +204,6 @@ public class MainRenderer implements GLSurfaceView.Renderer {
                 String myfile="Ruler_Capture_"+dateString+".jpeg";
 
 
-//                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "printerscreenshots" + File.separator + "image");
                 File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
                 dir_image.mkdirs();
                 try {
