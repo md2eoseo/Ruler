@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MeasureActivity extends Activity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MeasureActivity.class.getSimpleName();
 
     private TextView mTextView;
     private GLSurfaceView mSurfaceView;

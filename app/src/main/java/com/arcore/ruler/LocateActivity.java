@@ -1,5 +1,5 @@
 package com.arcore.ruler;
-//주석
+
 import android.app.Activity;
 import android.hardware.display.DisplayManager;
 import android.opengl.GLSurfaceView;
@@ -42,7 +42,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class LocateActivity extends Activity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = LocateActivity.class.getSimpleName();
     private boolean mUserRequestedInstall = true;
 
     private TextView locate_rotate;
@@ -220,8 +220,8 @@ public class LocateActivity extends Activity {
                             float position[] = calculateInitialPosition(mRenderer.getWidth(), mRenderer.getHeight(), projMatrix, viewMatrix);
 
                             Matrix.setIdentityM(mModelMatrix, 0); //단위행렬 생성. 매트릭스를 만들어냄 -> 오브젝트가 생성되도록 하는 기능
-                            Matrix.translateM(mModelMatrix, 0, position[0], position[1], position[2]); // 평행이동 행렬 : 포지션값만큼 평행이동. 왜 있는 기능인지?
-                            Matrix.scaleM(mModelMatrix, 0, 0.02f, 0.02f, 0.02f); // 자기 위치에 생기는 사물의 초기 크기를 인위적으로 잡아줌. 사실 필요없음.
+                            Matrix.translateM(mModelMatrix, 0, position[0], position[1], position[2]); // 평행이동 행렬 : 포지션값만큼 평행이동
+                            Matrix.scaleM(mModelMatrix, 0, 0.02f, 0.02f, 0.02f); // 자기 위치에 생기는 사물의 초기 크기를 인위적으로 잡아줌
 
                             mModelInit[TABLE] = true;
                             mModelPut[TABLE] = false;
@@ -290,7 +290,7 @@ public class LocateActivity extends Activity {
                 }
 
 
-                //<<더블탭 이벤트 발생 시>> mIsPut이 true가 되며 아래 이벤트가 발생.
+                //<<더블탭 이벤트 발생 시>> mIsPut이 true가 되며 아래 이벤트가 발생
                 if (mIsPut) {
                     List<HitResult> results = frame.hitTest(mCurrentX, mCurrentY);
                     //HitTest를 하여 result를 가져옴. 만약 평면이 존재하면 그 위치에 물체를 놓음
@@ -315,7 +315,7 @@ public class LocateActivity extends Activity {
                                         mSelectedModel = -1;
 
                                         System.arraycopy(modelMatrix, 0, mTableModelMatrix, 0, 16);
-                                        Matrix.setIdentityM(mModelMatrix, 0); // 왜 있는지 모르겠음. 없어도 작동 잘 됨
+                                        Matrix.setIdentityM(mModelMatrix, 0);
 
                                         mIsPut = false;
 
@@ -609,11 +609,6 @@ public class LocateActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
-
-//    public void onSelectedButtonClicked(View view) {
-//        mSelectedModel=-1;
-//        mTextView.setText(getString(R.string.selected_complete_btn_order));
-//    }
 
     public void onTableButtonClicked(View view) {
         mSelectedModel = TABLE;

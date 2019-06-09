@@ -66,9 +66,9 @@ public class GalleryActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView imageView = new ImageView(context);
-            imageView.setLayoutParams(new Gallery.LayoutParams(100, 150));
+            imageView.setLayoutParams(new Gallery.LayoutParams(108, 204));
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setPadding(5,5,5,5);
+            imageView.setPadding(0,15,0,0);
 
             if(imgFiles[position].exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFiles[position].getAbsolutePath());
@@ -134,7 +134,7 @@ public class GalleryActivity extends AppCompatActivity {
     public void sendFile(File file){
         Uri uri = null;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            uri = FileProvider.getUriForFile(GalleryActivity.this, "com.test.fileprovider", file);
+            uri = FileProvider.getUriForFile(GalleryActivity.this, "com.ruler.fileprovider", file);
         }else{
             uri = Uri.fromFile(file);
         }
