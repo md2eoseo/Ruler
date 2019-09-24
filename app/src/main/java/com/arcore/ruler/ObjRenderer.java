@@ -68,6 +68,7 @@ public class ObjRenderer {
     private float[] mMinPoint;
     private float[] mMaxPoint;
 
+    //Obj 파일 연결
     public ObjRenderer(Context context, String objName, String textureName) {
         mContext = context;
         mObjName = objName;

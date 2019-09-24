@@ -35,6 +35,7 @@ import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -64,9 +65,16 @@ public class LocateActivity extends Activity {
     private float mScaleFactor = 0.02f;
     private float mRotateFactor = 0.0f;
 
+    //애셋의 개수 직접 입력
+    private final int assetsLength=3;
+
+    /*
     private final int TABLE = 0;
     private final int CHAIR = 1;
     private final int BED = 2;
+    */
+    private int[] assetsNum = new int[assetsLength];
+
 
 
     //물체가 회전 하는지의 여부를 결정 + 어떤 물체가 선택되었는지를 결정하는 변수
@@ -74,12 +82,24 @@ public class LocateActivity extends Activity {
 
     private float[] mModelMatrix = new float[16];
 
+
+
+    //Obj매트릭스 배열화
+    private float[][] mObjModelMatrix = new float[assetsLength][16];
+
+    /*
     private float[] mTableModelMatrix = new float[16];
     private float[] mChairModelMatrix = new float[16];
     private float[] mBedModelMatrix = new float[16];
+    */
 
+    /*
     private boolean[] mModelInit = { false, false, false };
     private boolean[] mModelPut = { false, false, false }; //모델이 놓여져 있는지 여부
+    */
+
+    private boolean[] mModelInit = new boolean[assetsLength];
+    private boolean[] mModelPut = new boolean[assetsLength]; //모델이 놓여져 있는지 여부
 
 
     //더블탭시 발동하는 스위치 변수. false일 경우에는 위치 지정x, true일 경우에는 위치 지정
@@ -104,6 +124,14 @@ public class LocateActivity extends Activity {
 
         locate_rotate = (TextView) findViewById(R.id.locate_rotate);
         locate_scale = (TextView) findViewById(R.id.locate_scale);
+
+        //인잇풋 초기화
+
+        for (int i = 0 ; i<assetsLength ; i++) {
+            mModelInit[i] = false;
+            mModelPut[i] = false;
+            assetsNum[i] = i;
+        }
 
 
         final DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
@@ -214,29 +242,69 @@ public class LocateActivity extends Activity {
                 float[] viewMatrix = new float[16];
                 camera.getViewMatrix(viewMatrix, 0);
 
-                switch (mSelectedModel) {
-                    case TABLE:
-                        if (!mModelInit[TABLE]) {
+
+                for(int k=0;k<assetsLength;k++){
+                    if(mSelectedModel==k){
+                        Log.d("a","사물 선택 시 선택된 물체 번호 : " + k);
+                        if (!mModelInit[k]) {
                             float position[] = calculateInitialPosition(mRenderer.getWidth(), mRenderer.getHeight(), projMatrix, viewMatrix);
 
                             Matrix.setIdentityM(mModelMatrix, 0); //단위행렬 생성. 매트릭스를 만들어냄 -> 오브젝트가 생성되도록 하는 기능
                             Matrix.translateM(mModelMatrix, 0, position[0], position[1], position[2]); // 평행이동 행렬 : 포지션값만큼 평행이동
                             Matrix.scaleM(mModelMatrix, 0, 0.02f, 0.02f, 0.02f); // 자기 위치에 생기는 사물의 초기 크기를 인위적으로 잡아줌
 
+                            mModelInit[k] = true;
+                            mModelPut[k] = false;
+                            Log.d("a","사물 선택 여부 알림 : " + mModelInit[k]);
+                        }
+                        if (!mModelPut[k]) {
+                            mRenderer.setObjModelMatrix(mModelMatrix, k);
+                        }
+                        mModelPut[k]=true;
+                        mRenderer.setObjDraw(mModelPut);
+                        mModelPut[k]=false;
+                        for(int j=0;j<assetsLength;j++) {
+                            if (j != k) {
+                                if (mModelInit[j] && !mModelPut[j]) { //init:true, put:false 일 시
+                                mModelInit[j] = false;
+                                }
+                            }
+                        }
+                    }
+                }
+                /*
+                switch (mSelectedModel) {
+                    case TABLE:
+                        if (!mModelInit[TABLE]) {
+                            float position[] = calculateInitialPosition(mRenderer.getWidth(),
+                                    mRenderer.getHeight(), projMatrix, viewMatrix);
+
+                            Matrix.setIdentityM(mModelMatrix, 0);
+                            Matrix.translateM(mModelMatrix, 0, position[0], position[1], position[2]);
+                            Matrix.scaleM(mModelMatrix, 0, 0.02f, 0.02f, 0.02f);
+
                             mModelInit[TABLE] = true;
                             mModelPut[TABLE] = false;
                         }
                         if (!mModelPut[TABLE]) {
-                            mRenderer.setTableModelMatrix(mModelMatrix);
+                            mRenderer.setObjModelMatrix(mModelMatrix,TABLE);
                         }
+
+                        //mModelPut[TABLE]=true;
+                        mModelPut[TABLE]=true;
+                        mRenderer.setObjDraw(mModelPut);
+                        mModelPut[TABLE]=false;
                         mRenderer.setModelDraw(true, mModelPut[CHAIR], mModelPut[BED]);
-                        if (mModelInit[CHAIR] && !mModelPut[CHAIR]) { //init:true, put:false 일 시
-                            mModelInit[CHAIR] = false;
-                        }
-                        if (mModelInit[BED] && !mModelPut[BED]) {
-                            mModelInit[BED] = false;
+
+                        for(int j=0;j<assetsLength;j++) {
+                            if (j != TABLE) {
+                                if (mModelInit[j] && !mModelPut[j]) { //init:true, put:false 일 시
+                                    mModelInit[j] = false;
+                                }
+                            }
                         }
                         break;
+
                     case CHAIR:
                         if (!mModelInit[CHAIR]) {
                             float position[] = calculateInitialPosition(mRenderer.getWidth(),
@@ -288,6 +356,7 @@ public class LocateActivity extends Activity {
                     default:
                         break;
                 }
+                */
 
 
                 //<<더블탭 이벤트 발생 시>> mIsPut이 true가 되며 아래 이벤트가 발생
@@ -305,16 +374,18 @@ public class LocateActivity extends Activity {
                         Matrix.rotateM(modelMatrix, 0, mRotateFactor, 0.0f, 1.0f, 0.0f); // 비율만큼 회전 ( 매트릭스, 배열시작점 보통0, 회전각, 회전벡터)
 
                         mScaleFactor = 0.02f;
-                        if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(result.getHitPose())) {
-                            switch (mSelectedModel) {
-                                case TABLE:
-                                    if (!mModelPut[TABLE]) {
-                                        mModelPut[TABLE] = true;
+
+                        for(int k=0;k<assetsLength;k++) {
+                            if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(result.getHitPose())) {
+                                Log.d("a", "배치 시 선택된 물체 번호 : " + k);
+                                if (mSelectedModel == k) {
+                                    if (!mModelPut[k]) {
+                                        mModelPut[k] = true;
 
                                         //회전과 크기 변환을 막는 기능. 단, 주석처리 할 경우 원하는 위치에 놓였다가 바로 사라짐.
                                         mSelectedModel = -1;
 
-                                        System.arraycopy(modelMatrix, 0, mTableModelMatrix, 0, 16);
+                                        System.arraycopy(modelMatrix, 0, mObjModelMatrix[k], 0, 16);
                                         Matrix.setIdentityM(mModelMatrix, 0);
 
                                         mIsPut = false;
@@ -322,6 +393,8 @@ public class LocateActivity extends Activity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
+                                                //수정필요
+
                                                 mTextView.setText(getString(R.string.table_put));
                                             }
                                         });
@@ -339,12 +412,18 @@ public class LocateActivity extends Activity {
                                         Timer textTimer = new Timer();
                                         textTimer.schedule(textTask, 2000);
                                     }
-                                    break;
-                                case CHAIR:
-                                    if (!mModelPut[CHAIR]) {
-                                        mModelPut[CHAIR] = true;
+                                }
+                            }
+                        }
+
+                        /*
+                        if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(result.getHitPose())) {
+                            switch (mSelectedModel){
+                                case TABLE:
+                                    if (!mModelPut[TABLE]) {
+                                        mModelPut[TABLE] = true;
                                         mSelectedModel = -1;
-                                        System.arraycopy(modelMatrix, 0, mChairModelMatrix, 0, 16);
+                                        System.arraycopy(modelMatrix, 0, mObjModelMarix[0], 0, 16);
                                         Matrix.setIdentityM(mModelMatrix, 0);
                                         mIsPut = false;
                                         runOnUiThread(new Runnable() {
@@ -368,36 +447,71 @@ public class LocateActivity extends Activity {
                                         textTimer.schedule(textTask, 2000);
                                     }
                                     break;
-                                case BED:
-                                    if (!mModelPut[BED]) {
-                                        mModelPut[BED] = true;
-                                        mSelectedModel = -1;
-                                        System.arraycopy(modelMatrix, 0, mBedModelMatrix, 0, 16);
-                                        Matrix.setIdentityM(mModelMatrix, 0);
-                                        mIsPut = false;
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                mTextView.setText(getString(R.string.bed_put));
-                                            }
-                                        });
-                                        TimerTask textTask = new TimerTask() {
-                                            @Override
-                                            public void run() {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        mTextView.setText(getString(R.string.not_selected));
-                                                    }
-                                                });
-                                            }
-                                        };
-                                        Timer textTimer = new Timer();
-                                        textTimer.schedule(textTask, 2000);
-                                    }
-                                    break;
+
+                                case CHAIR:
+                                    if (!mModelPut[CHAIR]) {
+                                    mModelPut[CHAIR] = true;
+                                    mSelectedModel = -1;
+                                    System.arraycopy(modelMatrix, 0, mObjModelMarix[1], 0, 16);
+                                    Matrix.setIdentityM(mModelMatrix, 0);
+                                    mIsPut = false;
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mTextView.setText(getString(R.string.chair_put));
+                                        }
+                                    });
+                                    TimerTask textTask = new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mTextView.setText(getString(R.string.not_selected));
+                                                }
+                                            });
+                                        }
+                                   };
+                                   Timer textTimer = new Timer();
+                                    textTimer.schedule(textTask, 2000);
+                                }
+                                break;
+                            case BED:
+                                if (!mModelPut[BED]) {
+                                    mModelPut[BED] = true;
+                                    mSelectedModel = -1;
+                                    System.arraycopy(modelMatrix, 0, mObjModelMarix[2], 0, 16);
+                                    Matrix.setIdentityM(mModelMatrix, 0);
+                                    mIsPut = false;
+                                    runOnUiThread(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           mTextView.setText(getString(R.string.bed_put));
+                                       }
+                                    });
+                                    TimerTask textTask = new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                           runOnUiThread(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   mTextView.setText(getString(R.string.not_selected));
+                                                }
+                                            });
+                                        }
+                                    };
+                                    Timer textTimer = new Timer();
+                                    textTimer.schedule(textTask, 2000);
+                                 }
+                                 break;
                             }
                         }
+                        */
+
+
+
+                            //////
+
                         if (!mIsPut) {
                             break;
                         }
@@ -415,20 +529,32 @@ public class LocateActivity extends Activity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        switch (mSelectedModel) {
-                                            case TABLE:
+                                        for(int k=0;k<assetsLength;k++){
+                                            if(mSelectedModel==k){
+
+
+                                                //스트링 수정필요
                                                 mTextView.setText(getString(R.string.table_selected));
                                                 break;
-                                            case CHAIR:
+                                            }
+                                        }
+
+
+                                        switch (mSelectedModel) {
+                                            case 0:
+                                                mTextView.setText(getString(R.string.table_selected));
+                                            case1:
                                                 mTextView.setText(getString(R.string.chair_selected));
                                                 break;
-                                            case BED:
+                                            case 2:
                                                 mTextView.setText(getString(R.string.bed_selected));
                                                 break;
                                             default:
                                                 mTextView.setText(getString(R.string.not_selected));
                                                 break;
                                         }
+
+
                                     }
                                 });
                             }
@@ -441,21 +567,34 @@ public class LocateActivity extends Activity {
 
 
                 //원하는 사물을 해당 위치에 배치
+
+                for(int i=0;i<assetsLength;i++){
+                    if (mModelPut[i]) {
+                        Log.d("a","사물배치시 번호 : " + i);
+                        mRenderer.setObjModelMatrix(mObjModelMatrix[i], i);
+                        mRenderer.updateObjViewMatrix(viewMatrix, i);
+                        mModelInit[i] = false;
+                    }
+                }
+
+                /*
                 if (mModelPut[TABLE]) {
-                    mRenderer.setTableModelMatrix(mTableModelMatrix);
+                    mRenderer.setTableModelMatrix(mObjModelMatrix[0]);
                     mRenderer.updateTableViewMatrix(viewMatrix);
                     mModelInit[TABLE] = false;
                 }
                 if (mModelPut[CHAIR]) {
-                    mRenderer.setChairModelMatrix(mChairModelMatrix);
+                    mRenderer.setChairModelMatrix(mObjModelMatrix[1]);
                     mRenderer.updateChairViewMatrix(viewMatrix);
                     mModelInit[CHAIR] = false;
                 }
                 if (mModelPut[BED]) {
-                    mRenderer.setBedModelMatrix(mBedModelMatrix);
+                    mRenderer.setBedModelMatrix(mObjModelMatrix[2]);
                     mRenderer.updateBedViewMatrix(viewMatrix);
                     mModelInit[BED] = false;
                 }
+                */
+
 
                 mRenderer.setProjectionMatrix(projMatrix);
                 mRenderer.updateViewMatrix(viewMatrix);
@@ -613,17 +752,17 @@ public class LocateActivity extends Activity {
     }
 
     public void onTableButtonClicked(View view) {
-        mSelectedModel = TABLE;
+        mSelectedModel = 0;
         mTextView.setText(getString(R.string.table_selected));
     }
 
     public void onChairButtonClicked(View view) {
-        mSelectedModel = CHAIR;
+        mSelectedModel = 1;
         mTextView.setText(getString(R.string.chair_selected));
     }
 
     public void onBedButtonClicked(View view) {
-        mSelectedModel = BED;
+        mSelectedModel = 2;
         mTextView.setText(getString(R.string.bed_selected));
     }
 }

@@ -8,6 +8,8 @@
     <string name="btn_remove">제거</string>
     <string name="txt_dist">미터</string>
     <string name="selected_complete">배치확정</string>
+
+
     <string name="table">테이블</string>
     <string name="chair">의자</string>
     <string name="bed">침대</string>
