@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/image3"
+        android:id="@+id/changeImage3"
+        android:layout_margin="20dp"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/image2"
+        android:id="@+id/changeImage2"
+        android:layout_margin="20dp"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/image1"
+        android:id="@+id/changeImage1"
+        android:layout_margin="20dp"
+        />
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="110dp"
+        android:layout_gravity="center|right"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/next"
+        android:onClick="onNextButtonClick"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="20dp"
+        android:text="skip"
+        android:layout_gravity="bottom|right"
+        android:onClick="onSkipButtonClick"
+        android:id="@+id/skipButton"
+        />
+</FrameLayout>
