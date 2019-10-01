@@ -1,19 +1,32 @@
 package com.arcore.ruler;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.hardware.display.DisplayManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Gallery;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +48,7 @@ import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -42,12 +56,18 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static java.util.Arrays.sort;
+
 public class LocateActivity extends Activity {
     private static final String TAG = LocateActivity.class.getSimpleName();
     private boolean mUserRequestedInstall = true;
 
     private TextView locate_rotate;
     private TextView locate_scale;
+
+
+    //ㅁㅇㄴㄻㄴㅇㄹ
+    private final int assetsLength = (new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/obj/").listFiles().length)/2;
 
 
     private TextView mTextView;
@@ -65,8 +85,6 @@ public class LocateActivity extends Activity {
     private float mScaleFactor = 0.02f;
     private float mRotateFactor = 0.0f;
 
-    //애셋의 개수 직접 입력
-    private final int assetsLength=3;
 
     /*
     private final int TABLE = 0;
@@ -108,16 +126,21 @@ public class LocateActivity extends Activity {
     private GestureDetector mGestureDetector; //가구회전 변수
     private ScaleGestureDetector mScaleDetector; // 가구 크기조절 변수
 
-        private Button btn_capture_locate;
+    private Button btn_capture_locate;
 
         //save Check
-        private Boolean isSaveClick = false;
+    private Boolean isSaveClick = false;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            hideStatusBarAndTitleBar();
-            setContentView(R.layout.activity_locate);
+    private Button btnAdt;
+
+
+
+    @SuppressLint("ResourceType")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        hideStatusBarAndTitleBar();
+        setContentView(R.layout.activity_locate);
 
         mTextView = (TextView) findViewById(R.id.txt_locate);
         mSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
@@ -132,6 +155,71 @@ public class LocateActivity extends Activity {
             mModelPut[i] = false;
             assetsNum[i] = i;
         }
+
+        ///////
+        File[] ObjFiles;
+        ObjFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/obj/").listFiles();
+        final File[] RealObjFiles = new File[(ObjFiles.length/2)];
+        final String[] RealObjFilesName = new String[(ObjFiles.length)/2];
+
+        String[] ObjFilesName = new String[ObjFiles.length];
+
+        for(int i=0;i<ObjFiles.length; i++){
+            ObjFilesName[i]=ObjFiles[i].getName();
+        }
+
+        sort(ObjFilesName);
+
+
+
+        int j=0;
+        for(int i=0;i<ObjFiles.length;i++){
+            String temp = ObjFilesName[i];
+            if (temp.contains(".obj")) {
+                RealObjFiles[j]=ObjFiles[i];
+                RealObjFilesName[j]=ObjFiles[i].getName();
+                j++;
+            }
+        }
+
+        btnAdt = (Button)findViewById(R.id.btnAdt);
+        btnAdt.setText("사물 선택");
+
+
+
+        final Button[] objBtn= new Button[(RealObjFiles.length)];
+
+        for(int i=0; i<RealObjFiles.length;i++){
+            objBtn[i] = new Button(LocateActivity.this);
+            objBtn[i].setText(RealObjFilesName[i].substring(0,RealObjFilesName[i].length()-4));
+            objBtn[i].setId(i);
+
+        }
+
+        btnAdt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ScrollView objListView = (ScrollView) ScrollView.inflate(LocateActivity.this, R.layout.view_objlist, null);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(LocateActivity.this);
+                dlg.setTitle("사물목록");
+                dlg.setView(objListView);
+                dlg.setNegativeButton("닫기",null);
+                dlg.show();
+
+                LinearLayout objListLinearLayout = (LinearLayout)findViewById(R.id.objListLinearLayout);;
+//                objListLinearLayout.addView(tx);
+
+                for(int i=0; i<RealObjFiles.length;i++) {
+//                    objListLinearLayout.addView(objBtn[i]);
+
+                }
+
+            }
+        });
+
+
+
 
 
         final DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
@@ -621,6 +709,8 @@ public class LocateActivity extends Activity {
 
     }
 
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         mGestureDetector.onTouchEvent(event);
@@ -645,6 +735,8 @@ public class LocateActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
+
 
 
         try {
@@ -765,4 +857,5 @@ public class LocateActivity extends Activity {
         mSelectedModel = 2;
         mTextView.setText(getString(R.string.bed_selected));
     }
+
 }

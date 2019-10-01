@@ -3,6 +3,7 @@ package com.arcore.ruler;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -16,6 +17,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
+        File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/images");
         dir_image.mkdirs();
 
         btn_measure = (Button)findViewById(R.id.btn_measure);
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 File[] imageFiles;
-                imageFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler").listFiles();
+                imageFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/images").listFiles();
                 if(imageFiles.length<1){
                     Toast.makeText(getApplicationContext(),"저장된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -114,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         requestCameraPermission();
         requestMemoryPermission();
     }

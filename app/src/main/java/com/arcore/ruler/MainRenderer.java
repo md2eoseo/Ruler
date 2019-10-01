@@ -31,6 +31,8 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static java.util.Arrays.sort;
+
 public class MainRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = MainRenderer.class.getSimpleName();
 
@@ -47,7 +49,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     private ObjRenderer mChair;
     private ObjRenderer mBed;
     */
-    private final int assetsLength = 3;
+    private final int assetsLength = (new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/obj/").listFiles().length)/2;
 
     //Obj 렌더 배열
     private ObjRenderer[] mObj = new ObjRenderer[assetsLength];
@@ -69,6 +71,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     protected boolean printOptionEnable = false;
 
 
+
     public interface RenderCallback {
             void preRender() throws CameraNotAvailableException;
     }
@@ -88,9 +91,44 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
 
         //Obj 추가하기
+        //mObj[0] = new ObjRenderer(context, "table.obj", "table.jpg");
+
+        File[] ObjFiles;
+        ObjFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/obj/").listFiles();
+
+        String[] objFileName = new String[ObjFiles.length];
+        for(int i=0;i<ObjFiles.length;i++){
+            objFileName[i]=ObjFiles[i].getName();
+        }
+        sort(objFileName);
+
+        final String[] RealObjFilesName = new String[(ObjFiles.length)/2];
+        final String[] RealJpgFilesName = new String[(ObjFiles.length)/2];
+
+
+        int objIndex=0;
+        int jpgIndex=0;
+
+        for(int i=0;i<ObjFiles.length;i++){
+            String temp = objFileName[i];
+            if (temp.contains(".obj")) {
+                RealObjFilesName[objIndex] = temp;
+                objIndex++;
+            }
+            if(temp.contains(".jpg")) {
+                RealJpgFilesName[jpgIndex] = temp;
+                jpgIndex++;
+            }
+        }
+
+        for(int i=0;i<assetsLength;i++){
+            mObj[i] = new ObjRenderer(context, RealObjFilesName[i], RealJpgFilesName[i]);
+        }
+        /*
         mObj[0] = new ObjRenderer(context, "table.obj", "table.jpg");
         mObj[1] = new ObjRenderer(context, "chair.obj", "chair.jpg");
         mObj[2] = new ObjRenderer(context, "bed.obj", "bed.jpg");
+        */
 
         //mIs 초기화
         for(int i=0;i<assetsLength;i++){

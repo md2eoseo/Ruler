@@ -6,10 +6,15 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
@@ -71,14 +76,26 @@ public class ObjRenderer {
     //Obj 파일 연결
     public ObjRenderer(Context context, String objName, String textureName) {
         mContext = context;
-        mObjName = objName;
-        mTextureName = textureName;
+
+        //mObjName = objName;
+        //mTextureName = textureName;
+        Log.d("a", "ObjRenderer로 진입");
+        mObjName = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/Ruler/obj/" + objName;
+        Log.d("a", mObjName);
+        mTextureName = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/Ruler/obj/" + textureName;
+        Log.d("a", mTextureName);
     }
 
     public void init() {
         try {
-            InputStream is = mContext.getAssets().open(mObjName);
-            Bitmap bmp = BitmapFactory.decodeStream(mContext.getAssets().open(mTextureName));
+            File ObjFile = new File(mObjName);
+            File TextureFile = new File(mTextureName);
+            FileInputStream is = new FileInputStream(ObjFile);
+            Bitmap bmp = BitmapFactory.decodeFile(TextureFile.getAbsolutePath());
+
+            //InputStream is = mContext.getAssets().open(mObjName);
+            //Bitmap bmp = BitmapFactory.decodeStream(mContext.getAssets().open(mTextureName));
+
             mObj = ObjReader.read(is);
             mObj = ObjUtils.convertToRenderable(mObj);
 
