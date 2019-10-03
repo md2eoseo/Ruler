@@ -15,6 +15,11 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp">
 
+        <TextView
+            android:id="@+id/identext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <ImageView
             android:id="@+id/logo"
             android:layout_width="wrap_content"

@@ -2,6 +2,7 @@ package com.arcore.ruler;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -24,20 +26,30 @@ public class MainActivity extends AppCompatActivity {
     Button btn_locate;
     Button btn_gallery;
     Button btn_exit;
+    TextView txt_iden;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //로그인된 사용자 정보 받아오는 코드
+        Intent sessintent = getIntent();
+        String userID = sessintent.getExtras().getString("userID");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
         dir_image.mkdirs();
 
+
+        txt_iden = (TextView)findViewById(R.id.identext);
         btn_measure = (Button)findViewById(R.id.btn_measure);
         btn_locate = (Button)findViewById(R.id.btn_locate);
         btn_gallery = (Button)findViewById(R.id.btn_gallery);
         btn_exit = (Button)findViewById(R.id.btn_exit);
+
+        txt_iden.setText(userID + "님 어서오세요!");
 
         btn_measure.setOnClickListener(new View.OnClickListener() {
             @Override
