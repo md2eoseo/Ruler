@@ -2,8 +2,8 @@ package com.arcore.ruler;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -17,10 +17,22 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
+    //첫실행체크
+    public SharedPreferences prefs;
+
+    public void checkFirstRun(){
+        boolean isFirstRun = prefs.getBoolean("isFirstRun",true);
+        if(isFirstRun)
+        {
+            Intent newIntent = new Intent(MainActivity.this, ManualActivity.class);
+            startActivity(newIntent);
+
+            prefs.edit().putBoolean("isFirstRun",false).apply();
+            //처음만 true 그다음부터는 false 바꾸는 동작
+        }
+    }
 
     public static final int IMAGE_GALLERY_REQUEST = 20;
     Button btn_measure;
@@ -31,10 +43,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //첫실행
+        prefs = getSharedPreferences("Pref", MODE_PRIVATE);
+        this.checkFirstRun();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/images");
+        File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
         dir_image.mkdirs();
 
         btn_measure = (Button)findViewById(R.id.btn_measure);
@@ -61,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 File[] imageFiles;
-                imageFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/images").listFiles();
+                imageFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler").listFiles();
                 if(imageFiles.length<1){
                     Toast.makeText(getApplicationContext(),"저장된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -122,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         requestCameraPermission();
         requestMemoryPermission();
     }
