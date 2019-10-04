@@ -94,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.b:
                 Toast.makeText(getApplicationContext(), "Ruler v1.0", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.c:
+                Toast.makeText(getApplicationContext(), "메뉴얼로 이동합니다.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), ManualActivity.class);
+                startActivity(intent);
+                return true;
         }
         return false;
     }

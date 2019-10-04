@@ -6,4 +6,7 @@
     <item
         android:id="@+id/b"
         android:title="버전"/>
+    <item
+        android:id="@+id/c"
+        android:title="메뉴얼"/>
 </menu>
