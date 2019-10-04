@@ -24,11 +24,14 @@ import java.io.IOException;
 import java.nio.IntBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import static java.util.Arrays.sort;
 
 public class MainRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = MainRenderer.class.getSimpleName();
@@ -41,13 +44,21 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     private PointCloudRenderer mPointCloud;
     private PlaneRenderer mPlane;
 
+    /*
     private ObjRenderer mTable;
     private ObjRenderer mChair;
     private ObjRenderer mBed;
+    */
+    private final int assetsLength = (new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/obj/").listFiles().length)/2;
 
+    //Obj 렌더 배열
+    private ObjRenderer[] mObj = new ObjRenderer[assetsLength];
+    /*
     private boolean mIsDrawTable = false;
     private boolean mIsDrawChair = false;
     private boolean mIsDrawBed = false;
+    //Obj 불린 배열*/
+    private boolean mIsDrawObj[] = new boolean[assetsLength];
 
     private List<Sphere> mSpheres = new ArrayList<Sphere>();
     private List<float[]> mPoints = new ArrayList<float[]>();
@@ -58,6 +69,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     private RenderCallback mRenderCallback;
 
     protected boolean printOptionEnable = false;
+
 
 
     public interface RenderCallback {
@@ -77,9 +89,52 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
         mPlane = new PlaneRenderer(Color.GRAY, 0.5f);
 
-        mTable = new ObjRenderer(context, "table.obj", "table.jpg");
-        mChair = new ObjRenderer(context, "chair.obj", "chair.jpg");
-        mBed = new ObjRenderer(context, "bed.obj", "bed.jpg");
+
+        //Obj 추가하기
+        //mObj[0] = new ObjRenderer(context, "table.obj", "table.jpg");
+
+        File[] ObjFiles;
+        ObjFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/obj/").listFiles();
+
+        String[] objFileName = new String[ObjFiles.length];
+        for(int i=0;i<ObjFiles.length;i++){
+            objFileName[i]=ObjFiles[i].getName();
+        }
+        sort(objFileName);
+
+        final String[] RealObjFilesName = new String[(ObjFiles.length)/2];
+        final String[] RealJpgFilesName = new String[(ObjFiles.length)/2];
+
+
+        int objIndex=0;
+        int jpgIndex=0;
+
+        for(int i=0;i<ObjFiles.length;i++){
+            String temp = objFileName[i];
+            if (temp.contains(".obj")) {
+                RealObjFilesName[objIndex] = temp;
+                objIndex++;
+            }
+            if(temp.contains(".jpg")) {
+                RealJpgFilesName[jpgIndex] = temp;
+                jpgIndex++;
+            }
+        }
+
+        for(int i=0;i<assetsLength;i++){
+            mObj[i] = new ObjRenderer(context, RealObjFilesName[i], RealJpgFilesName[i]);
+        }
+        /*
+        mObj[0] = new ObjRenderer(context, "table.obj", "table.jpg");
+        mObj[1] = new ObjRenderer(context, "chair.obj", "chair.jpg");
+        mObj[2] = new ObjRenderer(context, "bed.obj", "bed.jpg");
+        */
+
+        //mIs 초기화
+        for(int i=0;i<assetsLength;i++){
+            mIsDrawObj[i]=false;
+            Log.d("a","mIsDraw초기화" + mIsDrawObj[i]);
+        }
 
         mRenderCallback = callback;
     }
@@ -96,9 +151,15 @@ public class MainRenderer implements GLSurfaceView.Renderer {
 
         mPlane.init();
 
+        //obj 반복문화
+        for(int i=0; i<assetsLength;i++){
+            mObj[i].init();
+        }
+        /*
         mTable.init();
         mChair.init();
         mBed.init();
+        */
     }
 
     @Override
@@ -144,6 +205,15 @@ public class MainRenderer implements GLSurfaceView.Renderer {
             line.draw();
         }
 
+        //obj 반복문화
+        for(int i=0 ; i<assetsLength;i++){
+            if(mIsDrawObj[i]){
+                mObj[i].draw();
+            }
+        }
+
+        /*
+
         if (mIsDrawTable) {
             mTable.draw();
         }
@@ -153,6 +223,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         if (mIsDrawBed) {
             mBed.draw();
         }
+        */
 
 
         try {
@@ -270,17 +341,27 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         mPlane.update(plane);
     }
 
+    //새로 선언
+    public void setObjModelMatrix(float[] matrix, int index){
+        mObj[index].setModelMatrix(matrix);
+    }
+
+
+    /*
     public void setTableModelMatrix(float[] matrix) {
-        mTable.setModelMatrix(matrix);
+        mObj[0].setModelMatrix(matrix);
     }
 
     public void setChairModelMatrix(float[] matrix) {
-        mChair.setModelMatrix(matrix);
+        mObj[1].setModelMatrix(matrix);
     }
 
     public void setBedModelMatrix(float[] matrix) {
-        mBed.setModelMatrix(matrix);
+        mObj[2].setModelMatrix(matrix);
     }
+    */
+
+
 
     public void setProjectionMatrix(float[] matrix) {
         System.arraycopy(matrix, 0, mProjMatrix, 0, 16);
@@ -288,9 +369,17 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         mPointCloud.setProjectionMatrix(matrix);
 
         mPlane.setProjectionMatrix(matrix);
+
+        //Obj 반복문화
+        for(int i=0; i<assetsLength ; i++){
+            mObj[i].setProjectionMatrix(matrix);
+        }
+
+        /*
         mTable.setProjectionMatrix(matrix);
         mChair.setProjectionMatrix(matrix);
         mBed.setProjectionMatrix(matrix);
+        */
     }
 
     public void updateViewMatrix(float[] matrix) {
@@ -305,12 +394,21 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         }
 
         mPlane.setViewMatrix(matrix);
+
+        //Obj 반복문화
+        for(int i=0; i<assetsLength ; i++){
+            mObj[i].setViewMatrix(matrix);
+        }
+
+        /*
         mTable.setViewMatrix(matrix);
         mChair.setViewMatrix(matrix);
         mBed.setViewMatrix(matrix);
+        */
     }
 
     public void setModelMatrix(float[] matrix) {
+        Log.d("a", "setModelMatrix 여부 확인" );
     }
 
     public int addPoint(float[] point) {
@@ -357,21 +455,37 @@ public class MainRenderer implements GLSurfaceView.Renderer {
         return mSpheres.size();
     }
 
-    public void updateTableViewMatrix(float[] matrix) {
-        mTable.setViewMatrix(matrix);
+    public void updateObjViewMatrix(float[] matrix, int index){
+        mObj[index].setViewMatrix(matrix);
+        Log.d("a", "updateObjViewMatrix여부 확인 : " + index);
+    }
+
+    public void updateTableViewMatrix(float[] matrix) { mObj[0].setViewMatrix(matrix);
     }
 
     public void updateChairViewMatrix(float[] matrix) {
-        mChair.setViewMatrix(matrix);
+        mObj[1].setViewMatrix(matrix);
     }
 
     public void updateBedViewMatrix(float[] matrix) {
-        mBed.setViewMatrix(matrix);
+        mObj[2].setViewMatrix(matrix);
     }
 
+
+
     public void setModelDraw(boolean table, boolean chair, boolean bed) {
-        mIsDrawTable = table;
-        mIsDrawChair = chair;
-        mIsDrawBed = bed;
+        mIsDrawObj[0] = table;
+        mIsDrawObj[1] = chair;
+        mIsDrawObj[2] = bed;
+    }
+
+    public void setObjDraw(boolean[] objExist) {
+        int j=0;
+        for(boolean i:objExist){
+            mIsDrawObj[j]=i;
+            Log.d("a", "setObjDraw여부 확인" + mIsDrawObj[j]);
+            j++;
+
+        }
     }
 }

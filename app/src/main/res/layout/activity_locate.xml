@@ -63,6 +63,12 @@
             <!--android:onClick="onSelectedButtonClicked"/>-->
 
         <Button
+            android:id="@+id/btnAdt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="목록보기" />
+
+        <Button
             android:layout_width="80sp"
             android:layout_height="50sp"
             android:text="@string/table"
@@ -79,5 +85,7 @@
             android:onClick="onBedButtonClicked"/>
 
     </LinearLayout>
+
+
 
 </FrameLayout>

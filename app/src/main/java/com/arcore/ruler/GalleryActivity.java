@@ -149,7 +149,7 @@ public class GalleryActivity extends AppCompatActivity {
         super.onResume();
 
         File[] imageFiles;
-        imageFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler").listFiles();
+        imageFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/images/").listFiles();
 
         Gallery gallery = (Gallery) findViewById(R.id.Gallery1);
         MyGalleryAdapter galAdpater = new MyGalleryAdapter(this, imageFiles);
