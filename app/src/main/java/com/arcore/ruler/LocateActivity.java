@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.hardware.display.DisplayManager;
+import android.location.Location;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -27,6 +29,7 @@ import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -174,52 +177,34 @@ public class LocateActivity extends Activity {
 
         int j=0;
         for(int i=0;i<ObjFiles.length;i++){
-            String temp = ObjFilesName[i];
-            if (temp.contains(".obj")) {
+            if (ObjFilesName[i].contains(".obj")) {
                 RealObjFiles[j]=ObjFiles[i];
-                RealObjFilesName[j]=ObjFiles[i].getName();
+                RealObjFilesName[j]=ObjFilesName[i];
                 j++;
             }
         }
 
-        btnAdt = (Button)findViewById(R.id.btnAdt);
-        btnAdt.setText("사물 선택");
-
-
-
-        final Button[] objBtn= new Button[(RealObjFiles.length)];
-
-        for(int i=0; i<RealObjFiles.length;i++){
-            objBtn[i] = new Button(LocateActivity.this);
-            objBtn[i].setText(RealObjFilesName[i].substring(0,RealObjFilesName[i].length()-4));
-            objBtn[i].setId(i);
-
+        for(int i=0; i<RealObjFilesName.length;i++){
+            RealObjFilesName[i]=RealObjFilesName[i].substring(0,RealObjFilesName[i].length()-4);
         }
 
-        btnAdt.setOnClickListener(new View.OnClickListener() {
+        Spinner spinner = (Spinner) findViewById(R.id.ObjSpinner);
+        ArrayAdapter<String>adapter;
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, RealObjFilesName );
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mSelectedModel = position;
+                mTextView.setText(RealObjFilesName[position]+"이 선택되었습니다.");
+            }
 
-                ScrollView objListView = (ScrollView) ScrollView.inflate(LocateActivity.this, R.layout.view_objlist, null);
-                AlertDialog.Builder dlg = new AlertDialog.Builder(LocateActivity.this);
-                dlg.setTitle("사물목록");
-                dlg.setView(objListView);
-                dlg.setNegativeButton("닫기",null);
-                dlg.show();
-
-                LinearLayout objListLinearLayout = (LinearLayout)findViewById(R.id.objListLinearLayout);;
-//                objListLinearLayout.addView(tx);
-
-                for(int i=0; i<RealObjFiles.length;i++) {
-//                    objListLinearLayout.addView(objBtn[i]);
-
-                }
-
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mTextView.setText("사물이 선택되지 않았습니다.");
             }
         });
-
-
-
 
 
         final DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
@@ -857,5 +842,6 @@ public class LocateActivity extends Activity {
         mSelectedModel = 2;
         mTextView.setText(getString(R.string.bed_selected));
     }
+
 
 }
