@@ -49,7 +49,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
     private ObjRenderer mChair;
     private ObjRenderer mBed;
     */
-    private final int assetsLength = (new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/obj/").listFiles().length)/2;
+    private final int assetsLength = 0+ (new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/obj/").listFiles().length)/2;
 
     //Obj 렌더 배열
     private ObjRenderer[] mObj = new ObjRenderer[assetsLength];
@@ -275,7 +275,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
                 String myfile="Ruler_Capture_"+dateString+".jpeg";
 
 
-                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
+                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/images");
                 dir_image.mkdirs();
                 try {
                     File tmpFile = new File(dir_image,myfile);

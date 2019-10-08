@@ -57,21 +57,25 @@
         android:layout_gravity="bottom|end">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/statText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginBottom="60dp"
             android:background="#FFFFFF"
-            android:text="사물을 선택해주세요" />
+            android:padding="10dp"
+            android:text="사물을 선택해주세요"
+            android:textSize="15dp" />
 
         <Spinner
             android:id="@+id/ObjSpinner"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="100dp"
             android:layout_marginRight="10dp"
+            android:padding="5dp"
+            android:textSize="15dp"
             android:background="#FFFFFF"></Spinner>
 
         <!--<Button-->
