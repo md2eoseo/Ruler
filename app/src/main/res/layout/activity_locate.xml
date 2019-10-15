@@ -56,33 +56,43 @@
         android:orientation="vertical"
         android:layout_gravity="bottom|end">
 
+        <TextView
+            android:id="@+id/statText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="60dp"
+            android:background="#FFFFFF"
+            android:padding="10dp"
+            android:text="사물을 선택해주세요"
+            android:textSize="15dp" />
+
+        <Spinner
+            android:id="@+id/ObjSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="100dp"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
+            android:textSize="15dp"
+            android:background="#FFFFFF"></Spinner>
+
         <!--<Button-->
             <!--android:layout_width="80sp"-->
             <!--android:layout_height="50sp"-->
-            <!--android:text="@string/selected_complete"-->
-            <!--android:onClick="onSelectedButtonClicked"/>-->
-
-        <Button
-            android:id="@+id/btnAdt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="목록보기" />
-
-        <Button
-            android:layout_width="80sp"
-            android:layout_height="50sp"
-            android:text="@string/table"
-            android:onClick="onTableButtonClicked"/>
-        <Button
-            android:layout_width="80sp"
-            android:layout_height="50sp"
-            android:text="@string/chair"
-            android:onClick="onChairButtonClicked"/>
-        <Button
-            android:layout_width="80sp"
-            android:layout_height="50sp"
-            android:text="@string/bed"
-            android:onClick="onBedButtonClicked"/>
+            <!--android:text="@string/table"-->
+            <!--android:onClick="onTableButtonClicked"/>-->
+        <!--<Button-->
+            <!--android:layout_width="80sp"-->
+            <!--android:layout_height="50sp"-->
+            <!--android:text="@string/chair"-->
+            <!--android:onClick="onChairButtonClicked"/>-->
+        <!--<Button-->
+            <!--android:layout_width="80sp"-->
+            <!--android:layout_height="50sp"-->
+            <!--android:text="@string/bed"-->
+            <!--android:onClick="onBedButtonClicked"/>-->
 
     </LinearLayout>
 
