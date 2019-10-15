@@ -3,6 +3,9 @@ package com.arcore.ruler;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -16,6 +19,8 @@ public class ManualActivity extends AppCompatActivity {
     int[] imgs = new int[max];
 
     ImageView imageView, imageView2;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,29 @@ public class ManualActivity extends AppCompatActivity {
             imgs[i] = getApplicationContext().getResources().getIdentifier("img"+i, "drawable", getPackageName());
         }
     }
+    public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
+        MenuInflater mainInflater = getMenuInflater();
+        mainInflater.inflate(R.menu.manual_option, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item){
+        imageView.setVisibility(View.GONE);
+        imageView2.setVisibility(View.VISIBLE);
+        switch (item.getItemId()){
+            case R.id.menu1:
+                imageView2.setImageResource(imgs[1]);
+                return true;
+            case R.id.menu2:
+                imageView2.setImageResource(imgs[6]);
+                return true;
+            case R.id.menu3:
+                imageView2.setImageResource(imgs[11]);
+                return true;
+        }
+        return false;
+    }
+
     public void onSkipButtonClick(View view){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
@@ -42,63 +70,7 @@ public class ManualActivity extends AppCompatActivity {
 
         imageView.setVisibility(View.GONE);
         imageView2.setVisibility(View.VISIBLE);
-
-        switch (num)
-        {
-            case 1:
-                imageView2.setImageResource(imgs[0]);
-                break;
-            case 2:
-                imageView2.setImageResource(imgs[1]);
-                break;
-            case 3:
-                imageView2.setImageResource(imgs[2]);
-                break;
-            case 4:
-                imageView2.setImageResource(imgs[3]);
-                break;
-            case 5:
-                imageView2.setImageResource(imgs[4]);
-                break;
-            case 6:
-                imageView2.setImageResource(imgs[5]);
-                break;
-            case 7:
-                imageView2.setImageResource(imgs[6]);
-                break;
-            case 8:
-                imageView2.setImageResource(imgs[7]);
-                break;
-            case 9:
-                imageView2.setImageResource(imgs[8]);
-                break;
-            case 10:
-                imageView2.setImageResource(imgs[9]);
-                break;
-            case 11:
-                imageView2.setImageResource(imgs[10]);
-                break;
-            case 12:
-                imageView2.setImageResource(imgs[11]);
-                break;
-            case 13:
-                imageView2.setImageResource(imgs[12]);
-                break;
-            case 14:
-                imageView2.setImageResource(imgs[13]);
-                break;
-            case 15:
-                imageView2.setImageResource(imgs[14]);
-                break;
-            case 16:
-                imageView2.setImageResource(imgs[15]);
-                break;
-            case 17:
-                imageView2.setImageResource(imgs[16]);
-                break;
-            default:
-                break;
-        }
+        imageView2.setImageResource(imgs[num-1]);
         Toast.makeText(getApplicationContext(), num+"/17", Toast.LENGTH_SHORT).show();
     }
     public void onPrevButtonClick(View view){
@@ -111,63 +83,8 @@ public class ManualActivity extends AppCompatActivity {
 
         imageView.setVisibility(View.GONE);
         imageView2.setVisibility(View.VISIBLE);
+        imageView2.setImageResource(imgs[num-1]);
 
-        switch (num)
-        {
-            case 1:
-                imageView2.setImageResource(imgs[0]);
-                break;
-            case 2:
-                imageView2.setImageResource(imgs[1]);
-                break;
-            case 3:
-                imageView2.setImageResource(imgs[2]);
-                break;
-            case 4:
-                imageView2.setImageResource(imgs[3]);
-                break;
-            case 5:
-                imageView2.setImageResource(imgs[4]);
-                break;
-            case 6:
-                imageView2.setImageResource(imgs[5]);
-                break;
-            case 7:
-                imageView2.setImageResource(imgs[6]);
-                break;
-            case 8:
-                imageView2.setImageResource(imgs[7]);
-                break;
-            case 9:
-                imageView2.setImageResource(imgs[8]);
-                break;
-            case 10:
-                imageView2.setImageResource(imgs[9]);
-                break;
-            case 11:
-                imageView2.setImageResource(imgs[10]);
-                break;
-            case 12:
-                imageView2.setImageResource(imgs[11]);
-                break;
-            case 13:
-                imageView2.setImageResource(imgs[12]);
-                break;
-            case 14:
-                imageView2.setImageResource(imgs[13]);
-                break;
-            case 15:
-                imageView2.setImageResource(imgs[14]);
-                break;
-            case 16:
-                imageView2.setImageResource(imgs[15]);
-                break;
-            case 17:
-                imageView2.setImageResource(imgs[16]);
-                break;
-            default:
-                break;
-        }
         Toast.makeText(getApplicationContext(), num+"/17", Toast.LENGTH_SHORT).show();
     }
 }

@@ -8,6 +8,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.ar.core.Frame;
 import com.google.ar.core.Plane;
@@ -30,6 +31,8 @@ import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import de.javagl.obj.Obj;
 
 import static java.util.Arrays.sort;
 

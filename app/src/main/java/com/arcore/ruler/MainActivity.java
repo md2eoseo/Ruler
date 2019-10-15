@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     Button btn_gallery;
     Button btn_exit;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //첫실행
@@ -73,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         btn_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
