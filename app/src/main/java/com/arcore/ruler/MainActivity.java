@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -19,8 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     //첫실행체크
@@ -65,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         File dir_images = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/images");
         dir_images.mkdirs();
         File dir_obj = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/obj");
+        dir_obj.mkdirs();
+        File dir_tumb = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/tumb");
         dir_obj.mkdirs();
 
 

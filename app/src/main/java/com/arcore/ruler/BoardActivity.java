@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
+import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.android.volley.RequestQueue;
@@ -39,6 +40,9 @@ public class BoardActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
         setTitle("사물 다운로드 받기");
+
+        File dir_tumb = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/tumb");
+        dir_tumb.mkdirs();
 
         //파일리스트 불러오기
         final String filedirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Ruler/obj/";
@@ -147,11 +151,11 @@ public class BoardActivity extends Activity {
         super.onResume();
 
         File[] tumbFiles;
-        tumbFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/images/").listFiles();
+        tumbFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/tumb/").listFiles();
 
-        //Gallery gallery = (Gallery) findViewById(R.id.Gallery1);
-        //MyGridAdapter gridAdpater = new MyGridAdapter(this, tumbFiles);
-        //gallery.setAdapter(gridAdpater);
+        GridView grid = (GridView) findViewById(R.id.grid);
+        MyGridAdapter gridAdpater = new MyGridAdapter(this, tumbFiles);
+        grid.setAdapter(gridAdpater);
 
     }
 }
