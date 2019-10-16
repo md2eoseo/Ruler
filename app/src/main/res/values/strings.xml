@@ -2,7 +2,7 @@
     <string name="app_name">Ruler</string>
     <string name="btn_measure">거리 측정</string>
     <string name="btn_locate">모델 배치</string>
-    <string name="exit">나가기</string>
+    <string name="board">모델 다운로드</string>
     <string name="activity_measure_label">거리 측정</string>
     <string name="activity_locate_label">모델 배치</string>
     <string name="btn_remove">제거</string>

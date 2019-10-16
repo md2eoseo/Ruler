@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
                             boolean success = jsonResponse.getBoolean("success");
 
                             if(success){
-                                Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "가입완료", Toast.LENGTH_SHORT).show();
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                                 builder.setMessage("register success!").setPositiveButton("ok",null).create().show();

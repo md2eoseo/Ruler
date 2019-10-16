@@ -1,15 +1,10 @@
 package com.arcore.ruler;
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,15 +18,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -76,12 +62,13 @@ public class LoginActivity extends AppCompatActivity {
                             boolean success = jsonResponse.getBoolean("success");
 
 
-                            Toast.makeText(getApplicationContext(), "success" + success, Toast.LENGTH_SHORT).show();
+
 
                             if(success){
                                 String userID = jsonResponse.getString("userid");
                                 String userPassword = jsonResponse.getString("passwd");
 
+                                Toast.makeText(getApplicationContext(), userID + "님 환영합니다!", Toast.LENGTH_SHORT).show();
 
                                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
 

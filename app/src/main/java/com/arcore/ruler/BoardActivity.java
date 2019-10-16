@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -15,14 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.GridView;
 import android.widget.ImageView;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,58 +24,72 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
 public class BoardActivity extends Activity {
-    String[] fileList;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
-        setTitle("사물 다운로드 받기");
+        setTitle("모델 다운로드");
 
-        File dir_tumb = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/tumb");
-        dir_tumb.mkdirs();
+        String imgURL = "http://13.125.224.69/tpicture/";
+        final String[] myRemoteImages = {
+                imgURL+"bed.jpg",
+                imgURL+"chair.jpg",
+                imgURL+"square.jpg",
+                imgURL+"table.jpg"
+        };
+        final Bitmap[] bm = new Bitmap[myRemoteImages.length];
 
-        //파일리스트 불러오기
-        final String filedirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Ruler/obj/";
-        final String servUrl = "http://13.125.224.69/obj/";
-        final String tpicUrl = "http://13.125.224.69/obj/tpicture";
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
+        final Handler handler = new Handler();
+        Thread mThread = new Thread(new Runnable() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonResponse = new JSONObject(response);
-                    int fnum = jsonResponse.getInt("fNum");
-                    for (int i = 0; i < fnum; i++) {
-                        String index = Integer.toString(i);
-                        fileList[i] = jsonResponse.getString(index);
+            public void run() {
 
+                for(int i=0;i<myRemoteImages.length;i++) {
+                    try {
+                        URL aURL = new URL(myRemoteImages[i]);
+                        HttpURLConnection conn = (HttpURLConnection)aURL.openConnection();
+                        conn.connect();
+                        InputStream is = conn.getInputStream();
+                        final BufferedInputStream bis = new BufferedInputStream(is);
+                        bm[i] = BitmapFactory.decodeStream(bis);
+                        bis.close();
+                        is.close();
+                    } catch (IOException e) {
+                        Log.e("DEBUGTAG", "Remtoe Image Exception", e);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
                 }
             }
-        };
-        Response.ErrorListener errlistener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("에러 => " + error.getMessage());
-            }
-        };
-        ListRequest listRequest = new ListRequest(responseListener, errlistener);
-        RequestQueue queue = Volley.newRequestQueue(BoardActivity.this);
-        queue.add(listRequest);
+        });
+        mThread.start();
+
+        try {
+            mThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        GridView grid = (GridView) findViewById(R.id.grid);
+        MyGridAdapter gridAdpater = new MyGridAdapter(this, bm, myRemoteImages);
+        grid.setAdapter(gridAdpater);
     }
+
 
     public class MyGridAdapter extends BaseAdapter {
         Context context;
-        File[] tumbFiles;
+        Bitmap[] tumbFiles;
+        String[] link;
 
-        public MyGridAdapter  (Context c, File[] Files) {
+        public MyGridAdapter  (Context c, Bitmap[] bm, String[] lk) {
             context = c;
-            tumbFiles = Files;
+            tumbFiles = bm;
+            link = lk;
         }
 
         @Override
@@ -103,16 +111,25 @@ public class BoardActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView imageView = new ImageView(context);
-            imageView.setLayoutParams(new Gallery.LayoutParams(200, 300));
+            imageView.setLayoutParams(new Gallery.LayoutParams(400, 800));
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setPadding(5,5,5,5);
+            imageView.setPadding(2,2,2,2);
 
-            if(tumbFiles[position].exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(tumbFiles[position].getAbsolutePath());
-                imageView.setImageBitmap(myBitmap);
+            if(position<4) {
+                imageView.setImageBitmap(tumbFiles[position]);
             }
 
             final int pos = position;
+
+            imageView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), link[pos].substring(30, link[pos].length()-4) + "를 다운로드 받았습니다.",Toast.LENGTH_SHORT).show();
+                    downLoadResource(link[pos].replace("tpicture","obj").substring(0,25), Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/obj/", link[pos].substring(30, link[pos].length()-4)+".jpg");
+                    downLoadResource(link[pos].replace("tpicture","obj").substring(0,25), Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/obj/", link[pos].substring(30, link[pos].length()-4)+".obj");
+                }
+            });
+
             return imageView;
         }
     }
@@ -149,13 +166,6 @@ public class BoardActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        File[] tumbFiles;
-        tumbFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/tumb/").listFiles();
-
-        GridView grid = (GridView) findViewById(R.id.grid);
-        MyGridAdapter gridAdpater = new MyGridAdapter(this, tumbFiles);
-        grid.setAdapter(gridAdpater);
 
     }
 }

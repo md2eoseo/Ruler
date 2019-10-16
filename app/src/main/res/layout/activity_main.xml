@@ -63,9 +63,9 @@
             android:layout_marginTop="4dp" />
 
         <Button
-            android:id="@+id/btn_exit"
+            android:id="@+id/btn_board"
             style="@style/button_style"
-            android:text="@string/exit"
+            android:text="@string/board"
             android:background="@drawable/button"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="4dp" />

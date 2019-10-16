@@ -44,6 +44,9 @@
         <activity android:name=".RegisterActivity"
             android:label = "회원가입">
         </activity>
+        <activity android:name=".BoardActivity"
+            android:label = "모델 다운로드">
+        </activity>
         <meta-data android:name="com.google.ar.core" android:value="required"/>
         <provider
             android:name="android.support.v4.content.FileProvider"

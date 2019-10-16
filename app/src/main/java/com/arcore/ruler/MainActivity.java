@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn_measure;
     Button btn_locate;
     Button btn_gallery;
-    Button btn_exit;
+    Button btn_board;
     TextView txt_iden;
 
 
@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
         dir_images.mkdirs();
         File dir_obj = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/obj");
         dir_obj.mkdirs();
-        File dir_tumb = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/tumb");
-        dir_obj.mkdirs();
 
 
 
@@ -72,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         btn_measure = (Button)findViewById(R.id.btn_measure);
         btn_locate = (Button)findViewById(R.id.btn_locate);
         btn_gallery = (Button)findViewById(R.id.btn_gallery);
-        btn_exit = (Button)findViewById(R.id.btn_exit);
+        btn_board = (Button)findViewById(R.id.btn_board);
 
         txt_iden.setText(userID + "님 어서오세요!");
 
@@ -106,10 +104,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        btn_exit.setOnClickListener(new View.OnClickListener() {
+        btn_board.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                //finish();
+                Intent intent = new Intent(getApplicationContext(), BoardActivity.class);
+                startActivity(intent);
             }
         });
     }
