@@ -60,8 +60,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
-        dir_image.mkdirs();
+        File dir_main = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler");
+        dir_main.mkdirs();
+        File dir_images = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/images");
+        dir_images.mkdirs();
+        File dir_obj = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/obj");
+        dir_obj.mkdirs();
+
 
 
         txt_iden = (TextView)findViewById(R.id.identext);

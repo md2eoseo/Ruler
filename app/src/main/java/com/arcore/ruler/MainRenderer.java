@@ -278,10 +278,10 @@ public class MainRenderer implements GLSurfaceView.Renderer {
                 String myfile="Ruler_Capture_"+dateString+".jpeg";
 
 
-                File dir_image = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/images");
-                dir_image.mkdirs();
+                File dir_images = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/images");
+                dir_images.mkdirs();
                 try {
-                    File tmpFile = new File(dir_image,myfile);
+                    File tmpFile = new File(dir_images,myfile);
                     FileOutputStream fos = new FileOutputStream(tmpFile);
                     byte[] buf = new byte[1024];
                     int len;
@@ -295,7 +295,7 @@ public class MainRenderer implements GLSurfaceView.Renderer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Log.v("hari", "저장경로:"+dir_image.toString());
+                Log.v("hari", "저장경로:"+dir_images.toString());
             }
         } catch(Exception e) {
             e.printStackTrace();
