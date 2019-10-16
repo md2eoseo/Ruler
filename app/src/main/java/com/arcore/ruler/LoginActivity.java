@@ -41,9 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     protected  void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        final String filedirectory = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/Ruler/obj/";
-        final String  servUrl = "http://13.125.224.69/obj/";
-        final String [] fileList= {"bed.jpg", "bed.obj", "chair.jpg", "chair.obj", "square.jpg", "square.obj", "table.jpg", "table.obj"};
+
 
         final EditText idText = (EditText)findViewById(R.id.idText);
         final EditText passwordText = (EditText)findViewById(R.id.passwordText);
@@ -55,9 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         registerbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               //다운로드 테스트
-
-
 
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 LoginActivity.this.startActivity(registerIntent);
@@ -92,11 +87,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                 intent.putExtra("userID",userID);
 
-
-
-
-                                for(int i = 0 ; i < fileList.length ; i++)
-                                    downLoadResource(servUrl, filedirectory, fileList[i]);
                                 LoginActivity.this.startActivity(intent);
                             }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
@@ -127,34 +117,5 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    void downLoadResource (String servUrl, String filedirectory, String fileList){
-        try
-        {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                    .permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-                URL url = new URL(servUrl + fileList);
-                File file = new File( filedirectory+fileList);
-                URLConnection ucon = url.openConnection();
-                InputStream is = ucon.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(is);
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                byte[] data = new byte[50];
-                int current = 0;
 
-                while((current = bis.read(data,0,data.length)) != -1){
-                    buffer.write(data,0,current);
-                }
-
-                FileOutputStream fos = new FileOutputStream(file);
-                fos.write(buffer.toByteArray());
-                fos.close();
-
-        }
-        catch (IOException e)
-        {
-            Log.e("download", e.getMessage());
-        }
-
-    }
 }
