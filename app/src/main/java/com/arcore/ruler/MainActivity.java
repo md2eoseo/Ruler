@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 File[] imageFiles;
-                imageFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler").listFiles();
+                imageFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/images").listFiles();
                 if(imageFiles.length<1){
                     Toast.makeText(getApplicationContext(),"저장된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
                 }
