@@ -1,7 +1,10 @@
 package com.arcore.ruler;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -9,7 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.widget.Gallery;
 import android.widget.ImageView;
 
 import com.android.volley.RequestQueue;
@@ -36,10 +39,6 @@ public class BoardActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
         setTitle("사물 다운로드 받기");
-
-        final GridView gv = (GridView) findViewById(R.id.grid);
-        MyGridAdapter gAdpater = new MyGridAdapter(this);
-        gv.setAdapter(gAdpater);
 
         //파일리스트 불러오기
         final String filedirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Ruler/obj/";
@@ -74,38 +73,43 @@ public class BoardActivity extends Activity {
 
     public class MyGridAdapter extends BaseAdapter {
         Context context;
+        File[] tumbFiles;
 
-        public MyGridAdapter(Context c) {
+        public MyGridAdapter  (Context c, File[] Files) {
             context = c;
+            tumbFiles = Files;
         }
 
+        @Override
         public int getCount() {
-            return 0;
+            return tumbFiles.length;
         }
 
-        public Object getItem(int arg0) {
+        @Override
+        public Object getItem(int position) {
             return null;
         }
 
-        public long getItemId(int arg0) {
+        @Override
+        public long getItemId(int position) {
             return 0;
         }
 
-        public View getView(int arg0, View arg1, ViewGroup arg2) {
-            ImageView imageview = new ImageView(context);
-            imageview.setLayoutParams(new GridView.LayoutParams(200, 30));
-            imageview.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageview.setPadding(5, 5, 5, 5);
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ImageView imageView = new ImageView(context);
+            imageView.setLayoutParams(new Gallery.LayoutParams(200, 300));
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageView.setPadding(5,5,5,5);
 
-            //imageview.setImageResource();
+            if(tumbFiles[position].exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(tumbFiles[position].getAbsolutePath());
+                imageView.setImageBitmap(myBitmap);
+            }
 
-            final int pos = 0;
-            imageview.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-
-                }
-            });
-            return null;
+            final int pos = position;
+            return imageView;
         }
     }
 
@@ -134,6 +138,20 @@ public class BoardActivity extends Activity {
         } catch (IOException e) {
             Log.e("download", e.getMessage());
         }
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        File[] tumbFiles;
+        tumbFiles = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Ruler/images/").listFiles();
+
+        //Gallery gallery = (Gallery) findViewById(R.id.Gallery1);
+        //MyGridAdapter gridAdpater = new MyGridAdapter(this, tumbFiles);
+        //gallery.setAdapter(gridAdpater);
 
     }
 }

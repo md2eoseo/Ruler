@@ -8,13 +8,10 @@ import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
@@ -79,6 +76,8 @@ public class ObjRenderer {
 
         //mObjName = objName;
         //mTextureName = textureName;
+        File dir_obj = new File(Environment.getExternalStorageDirectory() + File.separator + "Ruler/obj");
+        dir_obj.mkdirs();
         Log.d("a", "ObjRenderer로 진입");
         mObjName = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/Ruler/obj/" + objName;
         Log.d("a", mObjName);
