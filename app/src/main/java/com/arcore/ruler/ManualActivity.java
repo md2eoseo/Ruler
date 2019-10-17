@@ -14,7 +14,7 @@ public class ManualActivity extends AppCompatActivity {
 
     private int num = 0;
 
-    private int max = 17;
+    private int max = 21;
 
     int[] imgs = new int[max];
 
@@ -55,6 +55,9 @@ public class ManualActivity extends AppCompatActivity {
             case R.id.menu3:
                 imageView2.setImageResource(imgs[11]);
                 return true;
+            case R.id.menu4:
+                imageView2.setImageResource(imgs[17]);
+                return true;
         }
         return false;
     }
@@ -64,27 +67,27 @@ public class ManualActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void onNextButtonClick(View view){
-        num %= 17;
+        num %= 21;
 
         num++;
 
         imageView.setVisibility(View.GONE);
         imageView2.setVisibility(View.VISIBLE);
         imageView2.setImageResource(imgs[num-1]);
-        Toast.makeText(getApplicationContext(), num+"/17", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), num+"/21", Toast.LENGTH_SHORT).show();
     }
     public void onPrevButtonClick(View view){
-        num %= 17;
+        num %= 21;
 
         num--;
 
         if(num<=0)
-            num+=17;
+            num+=21;
 
         imageView.setVisibility(View.GONE);
         imageView2.setVisibility(View.VISIBLE);
         imageView2.setImageResource(imgs[num-1]);
 
-        Toast.makeText(getApplicationContext(), num+"/17", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), num+"/21", Toast.LENGTH_SHORT).show();
     }
 }

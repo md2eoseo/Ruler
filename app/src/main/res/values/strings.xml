@@ -23,6 +23,7 @@
     <string name="bed_put">침대를 놓았습니다.</string>
     <string name="selected_complete_btn_order">사물의 위치를 확정시켰습니다.</string>
     <string name="btn_gallery">갤러리</string>
+    <string name="btn_model_download">다운로드</string>
     <string name="activity_gallery_label">갤러리</string>
     <string name ="txt_roate">방향 : 0도</string>
     <string name ="txt_scale">크기 : 0배율</string>

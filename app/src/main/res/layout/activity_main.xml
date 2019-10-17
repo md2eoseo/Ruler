@@ -36,41 +36,41 @@
             android:layout_height="match_parent"
             android:stretchColumns="*">
             <TableRow>
-        <Button
-            android:id="@+id/btn_measure"
-            style="@style/button_style"
-            android:text="@string/btn_measure"
-            android:background="@drawable/button"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="4dp"/>
+                <Button
+                    android:id="@+id/btn_measure"
+                    style="@style/button_style"
+                    android:text="@string/btn_measure"
+                    android:background="@drawable/button"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="4dp"/>
 
-        <Button
-            android:id="@+id/btn_locate"
-            style="@style/button_style"
-            android:text="@string/btn_locate"
-            android:background="@drawable/button"
-            android:layout_marginLeft="4dp"
-            android:layout_marginBottom="4dp" />
+                <Button
+                    android:id="@+id/btn_locate"
+                    style="@style/button_style"
+                    android:text="@string/btn_locate"
+                    android:background="@drawable/button"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginBottom="4dp" />
+                </TableRow>
+
+            <TableRow>
+                <Button
+                    android:id="@+id/btn_gallery"
+                    style="@style/button_style"
+                    android:text="@string/btn_gallery"
+                    android:background="@drawable/button"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="4dp" />
+
+                <Button
+                    android:id="@+id/btn_board"
+                    style="@style/button_style"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/button"
+                    android:text="@string/btn_model_download" />
+
             </TableRow>
-
-        <TableRow>
-        <Button
-            android:id="@+id/btn_gallery"
-            style="@style/button_style"
-            android:text="@string/btn_gallery"
-            android:background="@drawable/button"
-            android:layout_marginRight="4dp"
-            android:layout_marginTop="4dp" />
-
-        <Button
-            android:id="@+id/btn_board"
-            style="@style/button_style"
-            android:text="@string/board"
-            android:background="@drawable/button"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="4dp" />
-
-        </TableRow>
         </TableLayout>
     </LinearLayout>
 <!--<GridLayout-->
