@@ -48,15 +48,19 @@ public class ManualActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.menu1:
                 imageView2.setImageResource(imgs[1]);
+                num = 2;
                 return true;
             case R.id.menu2:
                 imageView2.setImageResource(imgs[6]);
+                num = 7;
                 return true;
             case R.id.menu3:
                 imageView2.setImageResource(imgs[11]);
+                num = 12;
                 return true;
             case R.id.menu4:
                 imageView2.setImageResource(imgs[17]);
+                num = 18;
                 return true;
         }
         return false;
